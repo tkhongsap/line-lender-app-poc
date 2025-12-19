@@ -3,10 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useLiffContext } from '@/components/liff/LiffProvider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import {
   LayoutDashboard,
   FileText,
@@ -14,8 +12,6 @@ import {
   AlertTriangle,
   TrendingUp,
   Users,
-  CheckCircle,
-  XCircle,
   Clock,
   ChevronRight,
   BarChart3,
@@ -120,12 +116,12 @@ export default function DashboardPage() {
     return (
       <div className="container max-w-4xl mx-auto py-6 px-4">
         <div className="space-y-6">
-          <Skeleton className="h-8 w-48 bg-slate-700" />
+          <Skeleton className="h-8 w-48 bg-sidebar-accent" />
           <div className="grid grid-cols-2 gap-4">
-            <Skeleton className="h-28 bg-slate-700" />
-            <Skeleton className="h-28 bg-slate-700" />
-            <Skeleton className="h-28 bg-slate-700" />
-            <Skeleton className="h-28 bg-slate-700" />
+            <Skeleton className="h-28 bg-sidebar-accent" />
+            <Skeleton className="h-28 bg-sidebar-accent" />
+            <Skeleton className="h-28 bg-sidebar-accent" />
+            <Skeleton className="h-28 bg-sidebar-accent" />
           </div>
         </div>
       </div>
@@ -135,114 +131,114 @@ export default function DashboardPage() {
   const { metrics, aging, recentApplications, overdueContracts } = data || {};
 
   return (
-    <div className="container max-w-4xl mx-auto py-6 px-4 pb-20">
+    <div className="container max-w-4xl mx-auto py-6 px-4 pb-24">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <LayoutDashboard className="w-8 h-8 text-emerald-400" />
-        <h1 className="text-2xl font-bold text-white">แดชบอร์ด</h1>
+        <LayoutDashboard className="w-8 h-8 text-primary" />
+        <h1 className="text-2xl font-bold text-sidebar-foreground">แดชบอร์ด</h1>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <Card className="bg-gradient-to-br from-emerald-600 to-teal-600 border-0">
+        <Card className="bg-primary border-0">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-emerald-100 text-sm">ยอดปล่อยกู้</p>
-                <p className="text-2xl font-bold text-white">
+                <p className="text-primary-foreground/80 text-sm">ยอดปล่อยกู้</p>
+                <p className="text-2xl font-bold text-primary-foreground">
                   ฿{(metrics?.totalDisbursed || 0).toLocaleString()}
                 </p>
               </div>
-              <DollarSign className="w-10 h-10 text-emerald-200" />
+              <DollarSign className="w-10 h-10 text-primary-foreground/60" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-600 to-indigo-600 border-0">
+        <Card className="bg-sidebar-accent border-sidebar-border">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm">ยอดคงค้าง</p>
-                <p className="text-2xl font-bold text-white">
+                <p className="text-sidebar-foreground/60 text-sm">ยอดคงค้าง</p>
+                <p className="text-2xl font-bold text-sidebar-foreground">
                   ฿{(metrics?.totalOutstanding || 0).toLocaleString()}
                 </p>
               </div>
-              <TrendingUp className="w-10 h-10 text-blue-200" />
+              <TrendingUp className="w-10 h-10 text-primary/60" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-600 to-red-600 border-0">
+        <Card className="bg-destructive/10 border-destructive/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-orange-100 text-sm">ค้างชำระ</p>
-                <p className="text-2xl font-bold text-white">
+                <p className="text-destructive/80 text-sm">ค้างชำระ</p>
+                <p className="text-2xl font-bold text-destructive">
                   {metrics?.overdueCount || 0} ราย
                 </p>
               </div>
-              <AlertTriangle className="w-10 h-10 text-orange-200" />
+              <AlertTriangle className="w-10 h-10 text-destructive/60" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-600 to-pink-600 border-0">
+        <Card className="bg-accent border-primary/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm">รออนุมัติ</p>
-                <p className="text-2xl font-bold text-white">
+                <p className="text-accent-foreground/80 text-sm">รออนุมัติ</p>
+                <p className="text-2xl font-bold text-accent-foreground">
                   {metrics?.pendingApplications || 0} รายการ
                 </p>
               </div>
-              <FileText className="w-10 h-10 text-purple-200" />
+              <FileText className="w-10 h-10 text-primary/60" />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Contract Summary */}
-      <Card className="bg-slate-800 border-slate-700 mb-6">
+      <Card className="bg-sidebar-accent border-sidebar-border mb-6">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-emerald-400" />
+          <CardTitle className="text-sidebar-foreground flex items-center gap-2">
+            <Users className="w-5 h-5 text-primary" />
             สรุปสัญญา
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-2 text-center">
-            <div className="p-3 bg-slate-700 rounded-lg">
-              <p className="text-2xl font-bold text-white">{metrics?.totalContracts || 0}</p>
-              <p className="text-xs text-slate-400">ทั้งหมด</p>
+            <div className="p-3 bg-sidebar rounded-lg border border-sidebar-border">
+              <p className="text-2xl font-bold text-sidebar-foreground">{metrics?.totalContracts || 0}</p>
+              <p className="text-xs text-sidebar-foreground/60">ทั้งหมด</p>
             </div>
-            <div className="p-3 bg-emerald-900/50 rounded-lg">
-              <p className="text-2xl font-bold text-emerald-400">{metrics?.activeContracts || 0}</p>
-              <p className="text-xs text-slate-400">ใช้งาน</p>
+            <div className="p-3 bg-primary/10 rounded-lg border border-primary/20">
+              <p className="text-2xl font-bold text-primary">{metrics?.activeContracts || 0}</p>
+              <p className="text-xs text-sidebar-foreground/60">ใช้งาน</p>
             </div>
-            <div className="p-3 bg-slate-700 rounded-lg">
-              <p className="text-2xl font-bold text-slate-300">{metrics?.completedContracts || 0}</p>
-              <p className="text-xs text-slate-400">ปิดสัญญา</p>
+            <div className="p-3 bg-sidebar rounded-lg border border-sidebar-border">
+              <p className="text-2xl font-bold text-sidebar-foreground/70">{metrics?.completedContracts || 0}</p>
+              <p className="text-xs text-sidebar-foreground/60">ปิดสัญญา</p>
             </div>
-            <div className="p-3 bg-red-900/50 rounded-lg">
-              <p className="text-2xl font-bold text-red-400">{metrics?.defaultedContracts || 0}</p>
-              <p className="text-xs text-slate-400">ผิดนัด</p>
+            <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+              <p className="text-2xl font-bold text-destructive">{metrics?.defaultedContracts || 0}</p>
+              <p className="text-xs text-sidebar-foreground/60">ผิดนัด</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Aging Report */}
-      <Card className="bg-slate-800 border-slate-700 mb-6">
+      <Card className="bg-sidebar-accent border-sidebar-border mb-6">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-emerald-400" />
+          <CardTitle className="text-sidebar-foreground flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-primary" />
             Aging Report
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
             {[
-              { label: 'ปกติ', data: aging?.current, color: 'bg-emerald-500' },
+              { label: 'ปกติ', data: aging?.current, color: 'bg-primary' },
               { label: '1-7 วัน', data: aging?.days1to7, color: 'bg-yellow-500' },
               { label: '8-30 วัน', data: aging?.days8to30, color: 'bg-orange-500' },
               { label: '31-60 วัน', data: aging?.days31to60, color: 'bg-red-500' },
@@ -250,9 +246,9 @@ export default function DashboardPage() {
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
                 <div className={`w-3 h-3 rounded-full ${item.color}`} />
-                <span className="text-slate-300 w-20">{item.label}</span>
-                <span className="text-white font-medium">{item.data?.count || 0} ราย</span>
-                <span className="text-slate-400 text-sm ml-auto">
+                <span className="text-sidebar-foreground/80 w-20">{item.label}</span>
+                <span className="text-sidebar-foreground font-medium">{item.data?.count || 0} ราย</span>
+                <span className="text-sidebar-foreground/60 text-sm ml-auto">
                   ฿{(item.data?.amount || 0).toLocaleString()}
                 </span>
               </div>
@@ -262,14 +258,14 @@ export default function DashboardPage() {
       </Card>
 
       {/* Recent Pending Applications */}
-      <Card className="bg-slate-800 border-slate-700 mb-6">
+      <Card className="bg-sidebar-accent border-sidebar-border mb-6">
         <CardHeader className="pb-2 flex flex-row items-center justify-between">
-          <CardTitle className="text-white flex items-center gap-2">
-            <Clock className="w-5 h-5 text-yellow-400" />
+          <CardTitle className="text-sidebar-foreground flex items-center gap-2">
+            <Clock className="w-5 h-5 text-yellow-500" />
             คำขอรออนุมัติ
           </CardTitle>
-          <Link href="/admin/applications/pending">
-            <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300">
+          <Link href="/applications/pending">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
               ดูทั้งหมด <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
@@ -280,34 +276,34 @@ export default function DashboardPage() {
               {recentApplications.map((app) => (
                 <Link
                   key={app.id}
-                  href={`/admin/applications/${app.id}`}
-                  className="flex items-center justify-between p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
+                  href={`/applications/${app.id}`}
+                  className="flex items-center justify-between p-3 bg-sidebar rounded-lg border border-sidebar-border hover:border-primary/50 transition-colors"
                 >
                   <div>
-                    <p className="text-white font-medium">{app.fullName}</p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sidebar-foreground font-medium">{app.fullName}</p>
+                    <p className="text-sm text-sidebar-foreground/60">
                       {app.id} • ฿{app.requestedAmount.toLocaleString()}
                     </p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-400" />
+                  <ChevronRight className="w-5 h-5 text-sidebar-foreground/40" />
                 </Link>
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-400 py-4">ไม่มีคำขอรออนุมัติ</p>
+            <p className="text-center text-sidebar-foreground/60 py-4">ไม่มีคำขอรออนุมัติ</p>
           )}
         </CardContent>
       </Card>
 
       {/* Overdue Contracts */}
-      <Card className="bg-slate-800 border-slate-700 mb-6">
+      <Card className="bg-sidebar-accent border-sidebar-border mb-6">
         <CardHeader className="pb-2 flex flex-row items-center justify-between">
-          <CardTitle className="text-white flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-red-400" />
+          <CardTitle className="text-sidebar-foreground flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-destructive" />
             ค้างชำระ
           </CardTitle>
-          <Link href="/admin/contracts/overdue">
-            <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300">
+          <Link href="/contracts/overdue">
+            <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10">
               ดูทั้งหมด <ChevronRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
@@ -318,17 +314,17 @@ export default function DashboardPage() {
               {overdueContracts.map((contract) => (
                 <Link
                   key={contract.id}
-                  href={`/admin/contracts/${contract.id}`}
-                  className="flex items-center justify-between p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
+                  href={`/contracts/${contract.id}`}
+                  className="flex items-center justify-between p-3 bg-sidebar rounded-lg border border-sidebar-border hover:border-destructive/50 transition-colors"
                 >
                   <div>
-                    <p className="text-white font-medium">{contract.customerName}</p>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sidebar-foreground font-medium">{contract.customerName}</p>
+                    <p className="text-sm text-sidebar-foreground/60">
                       {contract.id} • ค้าง {contract.daysOverdue} วัน
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-red-400 font-medium">
+                    <p className="text-destructive font-medium">
                       ฿{contract.outstandingBalance.toLocaleString()}
                     </p>
                   </div>
@@ -336,34 +332,34 @@ export default function DashboardPage() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-slate-400 py-4">ไม่มีลูกหนี้ค้างชำระ</p>
+            <p className="text-center text-sidebar-foreground/60 py-4">ไม่มีลูกหนี้ค้างชำระ</p>
           )}
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-slate-900 border-t border-slate-700">
+      {/* Quick Actions - Fixed Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-sidebar border-t border-sidebar-border">
         <div className="max-w-4xl mx-auto grid grid-cols-4 gap-2">
-          <Link href="/admin/applications/pending">
-            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-slate-600 text-slate-300 hover:bg-slate-700">
+          <Link href="/applications/pending">
+            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:border-primary/50">
               <FileText className="w-5 h-5 mb-1" />
               <span className="text-xs">คำขอ</span>
             </Button>
           </Link>
-          <Link href="/admin/contracts/active">
-            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-slate-600 text-slate-300 hover:bg-slate-700">
+          <Link href="/contracts">
+            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:border-primary/50">
               <Users className="w-5 h-5 mb-1" />
               <span className="text-xs">สัญญา</span>
             </Button>
           </Link>
-          <Link href="/admin/payments/pending">
-            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-slate-600 text-slate-300 hover:bg-slate-700">
+          <Link href="/payments">
+            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:border-primary/50">
               <DollarSign className="w-5 h-5 mb-1" />
               <span className="text-xs">ชำระเงิน</span>
             </Button>
           </Link>
-          <Link href="/admin/reports">
-            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-slate-600 text-slate-300 hover:bg-slate-700">
+          <Link href="/reports">
+            <Button variant="outline" size="sm" className="w-full h-12 flex-col border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:border-primary/50">
               <BarChart3 className="w-5 h-5 mb-1" />
               <span className="text-xs">รายงาน</span>
             </Button>
@@ -373,4 +369,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

@@ -154,11 +154,11 @@ export default function ApplyPage() {
   if (isSuccess) {
     return (
       <div className="container max-w-lg mx-auto py-8 px-4">
-        <Card className="border-emerald-200 shadow-lg">
+        <Card className="border-primary/20 shadow-lg">
           <CardContent className="pt-8 pb-8 text-center space-y-4">
-            <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto" />
-            <h2 className="text-xl font-semibold text-emerald-700">ส่งคำขอเรียบร้อย!</h2>
-            <p className="text-gray-600">
+            <CheckCircle2 className="w-16 h-16 text-primary mx-auto" />
+            <h2 className="text-xl font-semibold text-primary">ส่งคำขอเรียบร้อย!</h2>
+            <p className="text-muted-foreground">
               เราจะพิจารณาคำขอของคุณและแจ้งผลผ่าน LINE
               <br />ภายใน 1-2 วันทำการ
             </p>
@@ -180,22 +180,22 @@ export default function ApplyPage() {
   }
 
   return (
-    <div className="container max-w-lg mx-auto py-6 px-4 pb-20">
-      <Card className="shadow-lg border-0">
-        <CardHeader className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-t-lg">
+    <div className="container max-w-lg mx-auto py-6 px-4">
+      <Card className="shadow-lg border-0 overflow-hidden">
+        <CardHeader className="bg-primary text-primary-foreground">
           <CardTitle className="text-xl">สมัครสินเชื่อ</CardTitle>
-          <CardDescription className="text-emerald-100">
+          <CardDescription className="text-primary-foreground/80">
             กรอกข้อมูลเพื่อยื่นคำขอสินเชื่อ
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 bg-background">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {/* Personal Information */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <span className="bg-emerald-100 text-emerald-700 w-6 h-6 rounded-full flex items-center justify-center text-sm">1</span>
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <span className="bg-accent text-accent-foreground w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">1</span>
                   ข้อมูลส่วนตัว
                 </h3>
 
@@ -260,8 +260,8 @@ export default function ApplyPage() {
 
               {/* Loan Information */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <span className="bg-emerald-100 text-emerald-700 w-6 h-6 rounded-full flex items-center justify-center text-sm">2</span>
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <span className="bg-accent text-accent-foreground w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">2</span>
                   ข้อมูลสินเชื่อ
                 </h3>
 
@@ -330,8 +330,8 @@ export default function ApplyPage() {
 
               {/* Collateral Information */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <span className="bg-emerald-100 text-emerald-700 w-6 h-6 rounded-full flex items-center justify-center text-sm">3</span>
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <span className="bg-accent text-accent-foreground w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">3</span>
                   ข้อมูลหลักทรัพย์ค้ำประกัน
                 </h3>
 
@@ -412,8 +412,8 @@ export default function ApplyPage() {
 
               {/* Document Upload */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <span className="bg-emerald-100 text-emerald-700 w-6 h-6 rounded-full flex items-center justify-center text-sm">4</span>
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <span className="bg-accent text-accent-foreground w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">4</span>
                   อัปโหลดเอกสาร
                 </h3>
 
@@ -430,14 +430,16 @@ export default function ApplyPage() {
                         <Label
                           htmlFor={`file-${doc.type}`}
                           className={`flex-1 flex items-center justify-between p-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
-                            uploaded ? 'border-emerald-500 bg-emerald-50' : 'border-gray-300 hover:border-emerald-400'
+                            uploaded 
+                              ? 'border-primary bg-accent' 
+                              : 'border-border hover:border-primary/50'
                           }`}
                         >
-                          <span className="text-sm">{doc.label}</span>
+                          <span className="text-sm text-foreground">{doc.label}</span>
                           {uploaded ? (
-                            <FileCheck className="w-5 h-5 text-emerald-600" />
+                            <FileCheck className="w-5 h-5 text-primary" />
                           ) : (
-                            <Upload className="w-5 h-5 text-gray-400" />
+                            <Upload className="w-5 h-5 text-muted-foreground" />
                           )}
                         </Label>
                         <input
@@ -464,15 +466,15 @@ export default function ApplyPage() {
                     <FormControl>
                       <input
                         type="checkbox"
-                        className="mt-1 h-4 w-4 text-emerald-600 border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-primary border-border rounded accent-primary"
                         checked={field.value}
                         onChange={field.onChange}
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm text-gray-700">
+                      <FormLabel className="text-sm text-muted-foreground">
                         ข้าพเจ้ายินยอมให้เก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคล
-                        ตาม <a href="#" className="text-emerald-600 underline">นโยบายความเป็นส่วนตัว</a>
+                        ตาม <a href="#" className="text-primary underline">นโยบายความเป็นส่วนตัว</a>
                       </FormLabel>
                       <FormMessage />
                     </div>
@@ -483,7 +485,7 @@ export default function ApplyPage() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 h-12 text-lg"
+                className="w-full h-12 text-lg font-semibold line-shadow-lg hover:scale-[1.02] transition-transform"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -505,4 +507,3 @@ export default function ApplyPage() {
     </div>
   );
 }
-
