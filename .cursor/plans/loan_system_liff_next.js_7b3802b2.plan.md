@@ -426,7 +426,3 @@ CRON_SECRET=
 | Phase | Duration | Deliverables ||-------|----------|--------------|| Phase 1: Setup | 2-3 days | Next.js project, Google services, LINE setup, Vercel deploy || Phase 2: Application | 3-4 days | Customer LIFF apply, Admin LIFF review, approval flow || Phase 3: Debt Tracking | 2-3 days | Calculations, payment schedules, daily cron || Phase 4: Notifications | 2 days | LINE push messages, reminders, logging || Phase 5: Dashboard | 2-3 days | Admin dashboard, reports, customer view || Phase 6: Slip OCR | 2 days | Slip2Go integration, auto-matching |**Total: 13-17 days**---
 
 ## Prerequisites Checklist
-
-Before starting development:
-
-1. [ ] LINE Official Account created
