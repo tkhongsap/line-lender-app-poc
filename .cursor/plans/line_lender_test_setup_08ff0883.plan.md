@@ -171,9 +171,9 @@ todos:
 
 1. In Replit Shell, run:
    ```javascript
-                        npm install
-                        npm run build
-                        npm start
+                           npm install
+                           npm run build
+                           npm start
    ```
 
 
@@ -239,6 +239,7 @@ Before starting, you'll collect these values:
 [ ] GOOGLE_PRIVATE_KEY
 [ ] GOOGLE_SPREADSHEET_ID
 [ ] GOOGLE_DRIVE_FOLDER_ID
+
 
 
 
