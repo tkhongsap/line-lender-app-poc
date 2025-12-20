@@ -1,0 +1,82 @@
+● Based on my comprehensive review of the codebase, here's the complete picture of customer touchpoints:
+
+  ---
+  Customer Touchpoints Overview
+
+  The single tool/channel for customers is LINE. All customer interactions happen through the LINE mobile app - there's no separate mobile app, website, or other channels required.
+
+  ---
+  1. LINE LIFF App (Primary Interface)
+
+  A mini web app embedded within LINE, accessed via LIFF (LINE Front-end Framework). Requires LINE login for authentication.
+
+  | Route      | Thai Label | Purpose                                                                               |
+  |------------|------------|---------------------------------------------------------------------------------------|
+  | /apply     | สมัคร       | Submit loan application with documents (ID card, house registration, collateral docs) |
+  | /status    | สถานะ       | View application status (SUBMITTED → PENDING → APPROVED/REJECTED → DISBURSED)         |
+  | /contracts | -          | View active loan contracts with progress bar                                          |
+  | /payment   | ชำระ        | View outstanding balance and payment schedule                                         |
+  | /slip      | ส่งสลิป      | Upload payment slip with OCR verification via Slip2Go API                             |
+
+  Navigation: Fixed bottom nav bar (LINE-style) defined in src/app/(customer)/layout.tsx:13-19
+
+  ---
+  2. LINE Chat Commands
+
+  Customers can type commands directly in the LINE chat (src/app/api/line/webhook/route.ts:138-255):
+
+  | Command      | Action                            |
+  |--------------|-----------------------------------|
+  | สมัคร         | Returns LIFF link to apply        |
+  | ยอด / เช็คยอด | Shows outstanding balance summary |
+  | ส่งสลิป        | Returns LIFF link to upload slip  |
+  | สถานะ         | Shows recent application statuses |
+  | ช่วยเหลือ      | Lists all available commands      |
+
+  ---
+  3. LINE Push Notifications (Automated)
+
+  Sent automatically via cron jobs and business events (src/lib/line.ts, src/app/api/cron/reminders/route.ts):
+
+  | Trigger                   | Message Type                         |
+  |---------------------------|--------------------------------------|
+  | Add as friend             | Welcome message with instructions    |
+  | Application approved      | Contract details, payment schedule   |
+  | Application rejected      | Reason for rejection                 |
+  | 7 days before due         | Payment reminder                     |
+  | On due date               | Due date alert                       |
+  | 1, 7, 14, 30 days overdue | Overdue alerts (escalating severity) |
+  | Payment verified          | Confirmation with remaining balance  |
+
+  ---
+  Architecture Summary
+
+  ┌─────────────────────────────────────────────────────────┐
+  │                      LINE App                            │
+  ├─────────────────────────────────────────────────────────┤
+  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+  │  │  LIFF App    │  │  Chat        │  │  Push        │  │
+  │  │  (Web Pages) │  │  Commands    │  │  Notifications│ │
+  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  │
+  └─────────┼─────────────────┼─────────────────┼──────────┘
+            │                 │                 │
+            ▼                 ▼                 ▼
+       ┌────────────────────────────────────────────┐
+       │            Next.js API Routes              │
+       │  /api/applications, /api/payments, etc.    │
+       └────────────────────────────────────────────┘
+                            │
+            ┌───────────────┼───────────────┐
+            ▼               ▼               ▼
+      Google Sheets    Google Drive    Slip2Go OCR
+      (Database)       (Documents)     (Slip Verify)
+
+  ---
+  Key Technical Details
+
+  - Authentication: LINE login via LIFF SDK (src/components/liff/LiffProvider.tsx)
+  - User Identity: LINE User ID captured automatically and passed via x-line-userid header
+  - Data Storage: Google Sheets as database
+  - Document Storage: Google Drive (organized by Application ID)
+  - Slip OCR: Slip2Go API for automatic payment verification
+  - All UI text: Thai language
