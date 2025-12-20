@@ -41,6 +41,6 @@ build = ["npm", "run", "build"]
 [userenv]
 
 [userenv.shared]
-NEXT_PUBLIC_BASE_URL = "https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev"
+NEXT_PUBLIC_BASE_URL = "https://line-lender-app-poc--tkhongsap.replit.app"
 NEXT_PUBLIC_LIFF_ID_CUSTOMER = "2008736154-4zHi92dC"
 NEXT_PUBLIC_LIFF_ID_ADMIN = ""
