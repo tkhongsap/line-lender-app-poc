@@ -1,0 +1,46 @@
+
+✓ Starting...
+✓ Ready in 901ms
+○ Compiling / ...
+ GET / 200 in 4.9s (compile: 4.5s, render: 405ms)
+ GET /web-admin/login 200 in 145ms (compile: 103ms, render: 42ms)
+Login initiated: {
+  host: '86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev',
+  protocol: 'https',
+  baseUrl: 'https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev',
+  redirectUri: 'https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev/api/web-admin/callback'
+}
+Auth URL: https://replit.com/oidc/auth?redirect_uri=https%3A%2F%2F86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev%2Fapi%2Fweb-admin%2Fcallback&scope=openid+email+profile+offline_access&state=eyJyZWRpcmVjdCI6Ii93ZWItYWRtaW4vZGFzaGJvYXJkIn0&prompt=login+consent&code_challenge=Qd_pGBiQ09QINYmJ2dSpGOm99DF-dVfFQGkSU_4njvs&code_challenge_method=S256&client_id=86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf&response_type=code
+ GET /api/web-admin/login 307 in 377ms (compile: 96ms, render: 281ms)
+Token exchange details: {
+  baseUrl: 'https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev',
+  storedRedirectUri: 'https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev/api/web-admin/callback',
+  callbackUrl: 'https://86eddb6f-e827-4a52-af0c-5aaf0cbcdfbf-00-3twlk4xs10b5s.sisko.replit.dev/api/web-admin/callback?code=jQu5ZPmWnjjYaC17DvR8O--T0Sy5onolRFO6skUYQZT&state=eyJyZWRpcmVjdCI6Ii93ZWItYWRtaW4vZGFzaGJvYXJkIn0',
+  requestUrl: 'https://0.0.0.0:5000/api/web-admin/callback?code=jQu5ZPmWnjjYaC17DvR8O--T0Sy5onolRFO6skUYQZT&state=eyJyZWRpcmVjdCI6Ii93ZWItYWRtaW4vZGFzaGJvYXJkIn0&iss=https%3A%2F%2Freplit.com%2Foidc',
+  codeVerifierLength: 43
+}
+Callback error: Error [ClientError]: invalid response encountered
+    at GET (src/app/api/web-admin/callback/route.ts:60:55)
+  58 |     });
+  59 |     
+> 60 |     const tokens = await client.authorizationCodeGrant(config, callbackUrl, {
+     |                                                       ^
+  61 |       expectedState: state || undefined,
+  62 |       pkceCodeVerifier: codeVerifier,
+  63 |       idTokenExpected: true, {
+  code: 'OAUTH_INVALID_RESPONSE',
+  [cause]: Error [OperationProcessingError]: response parameter "iss" (issuer) missing
+      at GET (src/app/api/web-admin/callback/route.ts:60:55)
+    58 |     });
+    59 |     
+  > 60 |     const tokens = await client.authorizationCodeGrant(config, callbackUrl, {
+       |                                                       ^
+    61 |       expectedState: state || undefined,
+    62 |       pkceCodeVerifier: codeVerifier,
+    63 |       idTokenExpected: true, {
+    code: 'OAUTH_INVALID_RESPONSE',
+    [cause]: { parameters: [Object] }
+  }
+}
+ GET /api/web-admin/callback?code=jQu5ZPmWnjjYaC17DvR8O--T0Sy5onolRFO6skUYQZT&state=eyJyZWRpcmVjdCI6Ii93ZWItYWRtaW4vZGFzaGJvYXJkIn0&iss=https%3A%2F%2Freplit.com%2Foidc 307 in 714ms (compile: 125ms, render: 589ms)
+ GET /web-admin/login?error=auth_failed 200 in 106ms (compile: 6ms, render: 100ms)
