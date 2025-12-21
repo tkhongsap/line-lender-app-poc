@@ -158,10 +158,10 @@ function ContractsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Contracts</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Contracts</h1>
           <p className="text-slate-400 mt-1">
             {sortedContracts.length} contracts found
           </p>
@@ -288,7 +288,7 @@ function ContractsContent() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-3 flex-wrap">
-                        <span className="font-mono text-sm text-slate-400">{contract.id}</span>
+                        <span className="font-mono text-sm text-slate-400 truncate max-w-[100px] sm:max-w-none">{contract.id}</span>
                         <Badge className={statusColors[contract.status]}>
                           {statusLabels[contract.status]}
                         </Badge>
@@ -299,20 +299,25 @@ function ContractsContent() {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-lg font-semibold text-white">{contract.customerName}</p>
-                      <div className="flex items-center gap-4 text-sm text-slate-400 flex-wrap">
-                        <span>{contract.customerPhone}</span>
-                        <span>
+                      <p className="text-lg font-semibold text-white truncate max-w-[200px] sm:max-w-none">{contract.customerName}</p>
+                      <div className="grid grid-cols-1 sm:flex sm:items-center gap-1 sm:gap-4 text-sm text-slate-400">
+                        <span className="flex justify-between sm:block">
+                          <span className="sm:hidden text-slate-500">Phone:</span>
+                          {contract.customerPhone}
+                        </span>
+                        <span className="flex justify-between sm:block">
+                          <span className="sm:hidden text-slate-500">Amount:</span>
                           {new Intl.NumberFormat('th-TH', {
                             style: 'currency',
                             currency: 'THB',
                           }).format(contract.approvedAmount)}
                         </span>
-                        <span className={getOverdueColor(contract.daysOverdue)}>
-                          Outstanding: {new Intl.NumberFormat('th-TH', {
+                        <span className={`flex justify-between sm:block ${getOverdueColor(contract.daysOverdue)}`}>
+                          <span className="sm:hidden text-slate-500">Outstanding:</span>
+                          <span>{new Intl.NumberFormat('th-TH', {
                             style: 'currency',
                             currency: 'THB',
-                          }).format(contract.outstandingBalance)}
+                          }).format(contract.outstandingBalance)}</span>
                         </span>
                       </div>
                       <div className="text-xs text-slate-500">

@@ -210,7 +210,7 @@ function RecordPaymentContent() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-2xl mx-auto">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-2xl mx-auto">
       <div className="flex items-center gap-4 mb-2">
         <Link href="/web-admin/payments">
           <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
@@ -222,7 +222,7 @@ function RecordPaymentContent() {
 
       <div className="flex items-center gap-3">
         <DollarSign className="w-8 h-8 text-green-400" />
-        <h1 className="text-2xl font-bold text-white">Record Payment</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-white">Record Payment</h1>
       </div>
 
       <Card className="bg-slate-800/50 border-slate-700">

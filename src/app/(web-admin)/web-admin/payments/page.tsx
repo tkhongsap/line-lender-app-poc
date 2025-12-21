@@ -169,10 +169,10 @@ function PaymentsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Payments</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Payments</h1>
           <p className="text-slate-400 mt-1">{filteredPayments.length} payments found</p>
         </div>
         <div className="flex gap-3 items-center">
@@ -283,7 +283,7 @@ function PaymentsContent() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <span className="font-mono text-sm text-slate-400">{payment.id}</span>
+                      <span className="font-mono text-sm text-slate-400 truncate max-w-[120px] sm:max-w-none">{payment.id}</span>
                       <Badge className={`gap-1 ${statusColors[payment.verificationStatus]}`}>
                         {statusIcons[payment.verificationStatus]}
                         {payment.verificationStatus}
@@ -298,14 +298,14 @@ function PaymentsContent() {
                     <div className="flex items-center gap-3">
                       <p className="text-xl font-bold text-white">{formatCurrency(payment.amount)}</p>
                       {payment.customerName && (
-                        <span className="text-slate-300 flex items-center gap-1">
-                          <User className="w-3 h-3" />
+                        <span className="text-slate-300 flex items-center gap-1 truncate max-w-[150px] sm:max-w-none">
+                          <User className="w-3 h-3 flex-shrink-0" />
                           {payment.customerName}
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-slate-400 flex-wrap">
-                      <span>Contract: {payment.contractId}</span>
+                      <span className="truncate max-w-[150px] sm:max-w-none">Contract: {payment.contractId}</span>
                       <span>{payment.paymentMethod}</span>
                       <span>
                         {format(new Date(payment.paymentDate), 'PP', { locale: th })}

@@ -149,11 +149,11 @@ function SettingsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
           <Settings className="w-8 h-8 text-green-400" />
-          <h1 className="text-2xl font-bold text-white">Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Settings</h1>
         </div>
         <Button
           onClick={handleSave}

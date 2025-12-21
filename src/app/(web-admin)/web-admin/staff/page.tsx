@@ -206,12 +206,12 @@ function StaffManagementContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-green-400" />
-            <h1 className="text-2xl font-bold text-white">Staff Management</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-white">Staff Management</h1>
           </div>
           <p className="text-slate-400 mt-1">{staff.length} staff members</p>
         </div>
@@ -222,7 +222,7 @@ function StaffManagementContent() {
               Add Staff
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-slate-800 border-slate-700">
+          <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-white">Add New Staff</DialogTitle>
               <DialogDescription className="text-slate-400">
@@ -369,7 +369,7 @@ function StaffManagementContent() {
 
       {/* Edit Dialog */}
       <Dialog open={!!editingStaff} onOpenChange={() => setEditingStaff(null)}>
-        <DialogContent className="bg-slate-800 border-slate-700">
+        <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-white">Edit Staff</DialogTitle>
             <DialogDescription className="text-slate-400">

@@ -196,7 +196,7 @@ function OverdueContractsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex items-center gap-4 mb-2">
         <Link href="/web-admin/contracts">
           <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">

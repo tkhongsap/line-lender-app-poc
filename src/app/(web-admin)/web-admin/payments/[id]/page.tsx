@@ -182,7 +182,7 @@ function PaymentDetailContent() {
   const amountMatch = Math.abs(amountDifference) < 1;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-2">
         <Link href="/web-admin/payments/pending">
@@ -195,7 +195,7 @@ function PaymentDetailContent() {
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-white">Payment {payment.id}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Payment {payment.id}</h1>
           <Badge className={statusColors[payment.verificationStatus]}>
             {payment.verificationStatus === 'PENDING' && <Clock className="w-3 h-3 mr-1" />}
             {payment.verificationStatus === 'VERIFIED' && <CheckCircle className="w-3 h-3 mr-1" />}
@@ -379,7 +379,7 @@ function PaymentDetailContent() {
 
       {/* Reject Dialog */}
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
-        <DialogContent className="bg-slate-800 border-slate-700">
+        <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto">
           <DialogHeader>
             <DialogTitle className="text-white">Reject Payment</DialogTitle>
             <DialogDescription className="text-slate-400">

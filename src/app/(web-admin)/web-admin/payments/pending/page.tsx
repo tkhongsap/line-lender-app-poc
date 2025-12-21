@@ -111,7 +111,7 @@ function PendingPaymentsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex items-center gap-4 mb-2">
         <Link href="/web-admin/payments">
           <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
@@ -184,7 +184,7 @@ function PendingPaymentsContent() {
 
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <span className="font-mono text-sm text-slate-400">{payment.id}</span>
+                      <span className="font-mono text-sm text-slate-400 truncate max-w-[100px] sm:max-w-none">{payment.id}</span>
                       <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 gap-1">
                         <Clock className="w-3 h-3" />
                         Pending
@@ -222,12 +222,12 @@ function PendingPaymentsContent() {
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Link href={`/web-admin/payments/${payment.id}`}>
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    <Link href={`/web-admin/payments/${payment.id}`} className="w-full sm:w-auto">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-blue-500/30 text-blue-400 hover:bg-blue-500/20"
+                        className="border-blue-500/30 text-blue-400 hover:bg-blue-500/20 w-full sm:w-auto"
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         Details
@@ -236,7 +236,7 @@ function PendingPaymentsContent() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="border-red-500/30 text-red-400 hover:bg-red-500/20"
+                      className="border-red-500/30 text-red-400 hover:bg-red-500/20 w-full sm:w-auto"
                       onClick={() => setRejectingPayment(payment)}
                       disabled={isProcessing}
                     >
@@ -245,7 +245,7 @@ function PendingPaymentsContent() {
                     </Button>
                     <Button
                       size="sm"
-                      className="bg-green-500 hover:bg-green-600 text-white"
+                      className="bg-green-500 hover:bg-green-600 text-white w-full sm:w-auto"
                       onClick={() => {
                         setVerifyingId(payment.id);
                         handleVerify(payment.id, true);
@@ -269,7 +269,7 @@ function PendingPaymentsContent() {
 
       {/* Reject Dialog */}
       <Dialog open={!!rejectingPayment} onOpenChange={() => setRejectingPayment(null)}>
-        <DialogContent className="bg-slate-800 border-slate-700">
+        <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto">
           <DialogHeader>
             <DialogTitle className="text-white">Reject Payment</DialogTitle>
             <DialogDescription className="text-slate-400">

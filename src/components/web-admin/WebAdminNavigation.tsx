@@ -170,7 +170,7 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                   <ChevronDown className="w-3 h-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-slate-800 border-slate-700">
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="text-slate-400 text-xs">Quick Links</DropdownMenuLabel>
                   <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
@@ -231,10 +231,10 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-slate-800 border-slate-700">
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
                 <DropdownMenuLabel className="text-slate-300">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">
+                    <p className="text-sm font-medium truncate">
                       {user?.firstName} {user?.lastName}
                     </p>
                     <p className="text-xs text-slate-400">{user?.email}</p>

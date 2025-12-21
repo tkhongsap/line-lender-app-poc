@@ -164,7 +164,7 @@ function ContractDetailContent() {
   const progressPercent = totalInstallments > 0 ? (paidInstallments / totalInstallments) * 100 : 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-2">
         <Link href="/web-admin/contracts">
@@ -344,7 +344,8 @@ function ContractDetailContent() {
             </Link>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            {/* Desktop: Table view */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-700">
@@ -380,7 +381,7 @@ function ContractDetailContent() {
                         </Badge>
                       </td>
                       <td className="py-3 px-2 text-slate-400">
-                        {schedule.paidAt 
+                        {schedule.paidAt
                           ? format(new Date(schedule.paidAt), 'PP', { locale: th })
                           : '-'
                         }
@@ -389,6 +390,38 @@ function ContractDetailContent() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile: Card view */}
+            <div className="sm:hidden space-y-3">
+              {contract.schedules.map((schedule) => (
+                <div key={schedule.id} className="bg-slate-700/30 rounded-lg p-3 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">งวดที่ {schedule.installmentNumber}</span>
+                    <Badge className={`${paymentStatusColors[schedule.status]} gap-1`}>
+                      {paymentStatusIcons[schedule.status]}
+                      {schedule.status}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-sm">Due</span>
+                    <span className="text-white text-sm">{format(new Date(schedule.dueDate), 'PP', { locale: th })}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-sm">Amount</span>
+                    <span className="text-white font-medium">{formatCurrency(schedule.totalAmount)}</span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Principal: {formatCurrency(schedule.principalAmount)} • Interest: {formatCurrency(schedule.interestAmount)}
+                  </div>
+                  {schedule.paidAt && (
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-500">Paid</span>
+                      <span className="text-green-400">{format(new Date(schedule.paidAt), 'PP', { locale: th })}</span>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -414,12 +447,12 @@ function ContractDetailContent() {
                   .map((payment) => (
                     <div
                       key={payment.id}
-                      className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-slate-700/30 rounded-lg gap-3"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          payment.verificationStatus === 'VERIFIED' 
-                            ? 'bg-green-500/20' 
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center ${
+                          payment.verificationStatus === 'VERIFIED'
+                            ? 'bg-green-500/20'
                             : payment.verificationStatus === 'REJECTED'
                             ? 'bg-red-500/20'
                             : 'bg-yellow-500/20'
@@ -432,16 +465,16 @@ function ContractDetailContent() {
                             <Clock className="w-5 h-5 text-yellow-400" />
                           )}
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-white font-medium">
                             {formatCurrency(payment.amount)}
                           </p>
-                          <p className="text-slate-400 text-sm">
-                            {format(new Date(payment.paymentDate), 'PPP', { locale: th })} • {payment.paymentMethod}
+                          <p className="text-slate-400 text-sm truncate">
+                            {format(new Date(payment.paymentDate), 'PP', { locale: th })} • {payment.paymentMethod}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="flex items-center justify-between sm:justify-end gap-3 sm:text-right pl-13 sm:pl-0">
                         <Badge className={
                           payment.verificationStatus === 'VERIFIED'
                             ? 'bg-green-500/20 text-green-400'
@@ -456,7 +489,7 @@ function ContractDetailContent() {
                             href={payment.slipImageUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-green-400 flex items-center gap-1 mt-1 hover:underline"
+                            className="text-xs text-green-400 flex items-center gap-1 hover:underline"
                           >
                             <ExternalLink className="w-3 h-3" />
                             View Slip
@@ -473,7 +506,7 @@ function ContractDetailContent() {
 
       {/* Send Reminder Dialog */}
       <Dialog open={reminderDialogOpen} onOpenChange={setReminderDialogOpen}>
-        <DialogContent className="bg-slate-800 border-slate-700">
+        <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto">
           <DialogHeader>
             <DialogTitle className="text-white flex items-center gap-2">
               <Bell className="w-5 h-5 text-green-400" />
