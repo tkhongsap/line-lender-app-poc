@@ -5,9 +5,10 @@ import { LiffProvider, useLiffContext } from '@/components/liff/LiffProvider';
 import { Toaster } from '@/components/ui/sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShieldX, Loader2, CreditCard, LayoutDashboard, FileText, Users, DollarSign, BarChart3, Menu, X } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { ShieldX, Loader2, CreditCard, LayoutDashboard, FileText, Users, Menu, X } from 'lucide-react';
+import { Link, usePathname } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { LocaleSwitcherMinimal } from '@/components/LocaleSwitcher';
 
 function AdminGuard({ children }: { children: ReactNode }) {
   const liff = useLiffContext();
@@ -83,11 +84,12 @@ function AdminGuard({ children }: { children: ReactNode }) {
 function AdminNavigation({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useTranslations('navigation.admin');
 
   const navItems = [
-    { href: '/dashboard', icon: LayoutDashboard, label: 'แดชบอร์ด' },
-    { href: '/applications', icon: FileText, label: 'คำขอสินเชื่อ' },
-    { href: '/applications/pending', icon: Users, label: 'รออนุมัติ' },
+    { href: '/dashboard' as const, icon: LayoutDashboard, label: t('dashboard') },
+    { href: '/applications' as const, icon: FileText, label: t('applications') },
+    { href: '/applications/pending' as const, icon: Users, label: 'รออนุมัติ' },
   ];
 
   return (
@@ -108,37 +110,43 @@ function AdminNavigation({ children }: { children: ReactNode }) {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`gap-2 ${
-                      isActive
-                        ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                        : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </Button>
-                </Link>
-              );
-            })}
-          </nav>
+          <div className="hidden md:flex items-center gap-1">
+            <nav className="flex items-center gap-1">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`gap-2 ${
+                        isActive
+                          ? 'bg-primary/10 text-primary hover:bg-primary/20'
+                          : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent'
+                      }`}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      {item.label}
+                    </Button>
+                  </Link>
+                );
+              })}
+            </nav>
+            <LocaleSwitcherMinimal />
+          </div>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden text-sidebar-foreground"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          <div className="flex md:hidden items-center gap-2">
+            <LocaleSwitcherMinimal />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-sidebar-foreground"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}

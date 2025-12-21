@@ -27,7 +27,7 @@ export function useLiff(liffId?: string): UseLiffReturn {
 
   const handleLogin = useCallback(() => {
     if (state.isInitialized) {
-      login();
+      login(window.location.href);
     }
   }, [state.isInitialized]);
 

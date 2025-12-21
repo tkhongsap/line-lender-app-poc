@@ -1,0 +1,334 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "submitting": "Submitting...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "viewAll": "View All",
+    "noData": "No data",
+    "error": "Error",
+    "success": "Success",
+    "baht": "THB",
+    "person": "person",
+    "item": "item",
+    "day": "day",
+    "days": "days"
+  },
+  "navigation": {
+    "customer": {
+      "home": "Home",
+      "apply": "Apply for Loan",
+      "status": "Status",
+      "payment": "Payment",
+      "contracts": "Contracts",
+      "slip": "Upload Slip"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "applications": "Loan Applications",
+      "pendingApplications": "Pending Approval",
+      "contracts": "Contracts",
+      "payments": "Payments",
+      "reports": "Reports",
+      "staff": "Staff",
+      "settings": "Settings"
+    }
+  },
+  "apply": {
+    "title": "Loan Application",
+    "description": "Fill in the form to submit a loan application",
+    "sections": {
+      "personal": "Personal Information",
+      "loan": "Loan Information",
+      "collateral": "Collateral Information",
+      "documents": "Upload Documents"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "nationalId": "National ID",
+      "phone": "Phone Number",
+      "email": "Email",
+      "requestedAmount": "Requested Amount (THB)",
+      "purpose": "Purpose",
+      "purposeDetail": "Additional Details",
+      "collateralType": "Collateral Type",
+      "collateralValue": "Collateral Value (THB)",
+      "collateralAddress": "Collateral Address",
+      "collateralDescription": "Collateral Description"
+    },
+    "placeholders": {
+      "fullName": "John Doe",
+      "nationalId": "1234567890123",
+      "phone": "0812345678",
+      "email": "email@example.com",
+      "purposeDetail": "Describe the purpose in more detail...",
+      "collateralAddress": "Address or location details...",
+      "collateralDescription": "Additional details such as title deed number, vehicle registration..."
+    },
+    "purpose": {
+      "BUSINESS": "Business",
+      "PERSONAL": "Personal Expenses",
+      "EDUCATION": "Education",
+      "MEDICAL": "Medical",
+      "OTHER": "Other"
+    },
+    "collateral": {
+      "LAND": "Land",
+      "HOUSE": "House",
+      "CONDO": "Condominium",
+      "CAR": "Car",
+      "GOLD": "Gold",
+      "OTHER": "Other"
+    },
+    "documents": {
+      "ID_CARD": "ID Card",
+      "HOUSE_REGISTRATION": "House Registration",
+      "COLLATERAL_DOC": "Collateral Document",
+      "COLLATERAL_PHOTO": "Collateral Photo"
+    },
+    "pdpa": {
+      "consent": "I consent to the collection, use, and disclosure of personal data according to the",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "submitButton": "Submit Loan Application",
+    "success": {
+      "title": "Application Submitted!",
+      "message": "We will review your application and notify you via LINE within 1-2 business days",
+      "newApplication": "Submit New Application"
+    }
+  },
+  "validation": {
+    "fullName": {
+      "required": "Please enter your full name"
+    },
+    "nationalId": {
+      "invalid": "National ID must be 13 digits"
+    },
+    "phone": {
+      "invalid": "Phone number must be 10 digits"
+    },
+    "email": {
+      "invalid": "Invalid email format"
+    },
+    "requestedAmount": {
+      "min": "Minimum amount is 10,000 THB",
+      "max": "Maximum amount is 1,000,000 THB"
+    },
+    "collateralValue": {
+      "required": "Please specify collateral value"
+    },
+    "collateralAddress": {
+      "required": "Please specify collateral address"
+    },
+    "pdpaConsent": {
+      "required": "Please accept the terms and conditions"
+    },
+    "fileSize": {
+      "tooLarge": "File is too large (max 5MB)"
+    }
+  },
+  "status": {
+    "title": "Loan Application Status",
+    "noApplications": "No loan applications yet",
+    "amount": "Amount",
+    "submittedDate": "Submitted Date",
+    "rejectionReason": "Reason",
+    "statusLabels": {
+      "SUBMITTED": "Submitted",
+      "PENDING": "Pending Review",
+      "PENDING_DOCS": "Pending Documents",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "DISBURSED": "Disbursed"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "metrics": {
+      "totalDisbursed": "Total Disbursed",
+      "totalOutstanding": "Outstanding Balance",
+      "overdueCount": "Overdue",
+      "pendingApplications": "Pending Approval"
+    },
+    "contractSummary": {
+      "title": "Contract Summary",
+      "total": "Total",
+      "active": "Active",
+      "completed": "Completed",
+      "defaulted": "Defaulted"
+    },
+    "agingReport": {
+      "title": "Aging Report",
+      "current": "Current",
+      "days1to7": "1-7 days",
+      "days8to30": "8-30 days",
+      "days31to60": "31-60 days",
+      "days60plus": "60+ days"
+    },
+    "pendingApplications": {
+      "title": "Pending Applications",
+      "empty": "No pending applications"
+    },
+    "overdueContracts": {
+      "title": "Overdue",
+      "empty": "No overdue contracts",
+      "daysOverdue": "{days} days overdue"
+    },
+    "quickActions": {
+      "applications": "Applications",
+      "contracts": "Contracts",
+      "payments": "Payments",
+      "reports": "Reports"
+    }
+  },
+  "contracts": {
+    "title": "Contracts",
+    "contractId": "Contract ID",
+    "customerName": "Customer Name",
+    "approvedAmount": "Approved Amount",
+    "outstandingBalance": "Outstanding Balance",
+    "status": "Status",
+    "daysOverdue": "Days Overdue",
+    "statusLabels": {
+      "ACTIVE": "Active",
+      "COMPLETED": "Completed",
+      "DEFAULT": "Defaulted"
+    }
+  },
+  "payments": {
+    "title": "Payments",
+    "paymentId": "Payment ID",
+    "amount": "Amount",
+    "date": "Payment Date",
+    "status": "Status",
+    "statusLabels": {
+      "PENDING": "Pending Verification",
+      "VERIFIED": "Verified",
+      "REJECTED": "Rejected"
+    }
+  },
+  "webAdmin": {
+    "login": {
+      "title": "Admin Login",
+      "subtitle": "LINE Lender Admin",
+      "googleButton": "Sign in with Google",
+      "loginWithGoogle": "Sign in with Google"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "applications": "Loan Applications",
+      "pendingApplications": "Pending Approval",
+      "contracts": "Contracts",
+      "overdueContracts": "Overdue",
+      "payments": "Payments",
+      "pendingPayments": "Pending Verification",
+      "recordPayment": "Record Payment",
+      "reports": "Reports",
+      "staff": "Staff",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of your loan management system",
+      "stats": {
+        "totalDisbursed": "Total Disbursed",
+        "outstandingBalance": "Outstanding Balance",
+        "totalCollected": "Total Collected",
+        "overdueContracts": "Overdue Contracts"
+      },
+      "quickStats": {
+        "activeContracts": "Active Contracts",
+        "completed": "Completed",
+        "pendingApplications": "Pending Applications",
+        "pendingPayments": "Pending Payments",
+        "collectionRate": "Collection Rate",
+        "onTimeRate": "On-Time Payment Rate"
+      },
+      "overdueSeverity": {
+        "title": "Overdue by Severity",
+        "days1to7": "1-7 days",
+        "days8to30": "8-30 days",
+        "days31to60": "31-60 days",
+        "days60plus": "60+ days"
+      },
+      "agingReport": {
+        "title": "Aging Report",
+        "viewDetails": "View Details",
+        "current": "Current",
+        "contracts": "contracts",
+        "noContracts": "No contracts to display"
+      },
+      "overdueList": {
+        "title": "Overdue Contracts",
+        "viewAll": "View All",
+        "noOverdue": "No overdue contracts!",
+        "allOnTime": "All payments are on time.",
+        "daysLabel": "d"
+      },
+      "quickActions": {
+        "reviewApplications": "Review Applications",
+        "pending": "pending",
+        "verifyPayments": "Verify Payments",
+        "viewContracts": "View Contracts",
+        "active": "active"
+      },
+      "systemStatus": {
+        "title": "System Status",
+        "lineActive": "LINE Integration Active",
+        "sheetsConnected": "Google Sheets Connected",
+        "databaseOnline": "Database Online"
+      },
+      "errors": {
+        "loadFailed": "Failed to load dashboard data"
+      }
+    },
+    "sidebar": {
+      "overview": "Overview",
+      "dashboard": "Dashboard",
+      "applications": "Applications",
+      "allApplications": "All Applications",
+      "pendingReview": "Pending Review",
+      "contracts": "Contracts",
+      "allContracts": "All Contracts",
+      "overdue": "Overdue",
+      "payments": "Payments",
+      "allPayments": "All Payments",
+      "pendingVerification": "Pending Verification",
+      "reports": "Reports",
+      "generateReports": "Generate Reports",
+      "admin": "Admin",
+      "staffManagement": "Staff Management",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "collapse": "Collapse sidebar",
+      "expand": "Expand sidebar"
+    }
+  },
+  "errors": {
+    "userNotFound": "User not found",
+    "submitFailed": "Failed to submit application",
+    "fetchFailed": "Failed to load data",
+    "genericError": "An error occurred. Please try again."
+  },
+  "toasts": {
+    "applicationSubmitted": "Loan application submitted successfully",
+    "paymentRecorded": "Payment recorded successfully",
+    "settingsSaved": "Settings saved successfully"
+  },
+  "localeSwitcher": {
+    "language": "Language",
+    "thai": "Thai",
+    "english": "English"
+  }
+}

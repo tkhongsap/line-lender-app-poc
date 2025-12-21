@@ -1,0 +1,332 @@
+{
+  "common": {
+    "loading": "กำลังโหลด...",
+    "submitting": "กำลังส่ง...",
+    "submit": "ส่ง",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "close": "ปิด",
+    "save": "บันทึก",
+    "edit": "แก้ไข",
+    "delete": "ลบ",
+    "back": "กลับ",
+    "next": "ถัดไป",
+    "previous": "ก่อนหน้า",
+    "search": "ค้นหา",
+    "filter": "กรอง",
+    "viewAll": "ดูทั้งหมด",
+    "noData": "ไม่มีข้อมูล",
+    "error": "เกิดข้อผิดพลาด",
+    "success": "สำเร็จ",
+    "baht": "บาท",
+    "person": "ราย",
+    "item": "รายการ",
+    "day": "วัน",
+    "days": "วัน"
+  },
+  "navigation": {
+    "customer": {
+      "apply": "สมัครสินเชื่อ",
+      "status": "สถานะ",
+      "payment": "ชำระเงิน",
+      "contracts": "สัญญา",
+      "slip": "อัปโหลดสลิป"
+    },
+    "admin": {
+      "dashboard": "แดชบอร์ด",
+      "applications": "คำขอสินเชื่อ",
+      "contracts": "สัญญา",
+      "payments": "ชำระเงิน",
+      "reports": "รายงาน",
+      "staff": "พนักงาน",
+      "settings": "ตั้งค่า"
+    }
+  },
+  "apply": {
+    "title": "สมัครสินเชื่อ",
+    "description": "กรอกข้อมูลเพื่อยื่นคำขอสินเชื่อ",
+    "sections": {
+      "personal": "ข้อมูลส่วนตัว",
+      "loan": "ข้อมูลสินเชื่อ",
+      "collateral": "ข้อมูลหลักทรัพย์ค้ำประกัน",
+      "documents": "อัปโหลดเอกสาร"
+    },
+    "fields": {
+      "fullName": "ชื่อ-นามสกุล",
+      "nationalId": "เลขบัตรประชาชน",
+      "phone": "เบอร์โทรศัพท์",
+      "email": "อีเมล",
+      "requestedAmount": "วงเงินที่ต้องการ (บาท)",
+      "purpose": "วัตถุประสงค์",
+      "purposeDetail": "รายละเอียดเพิ่มเติม",
+      "collateralType": "ประเภทหลักทรัพย์",
+      "collateralValue": "มูลค่าหลักทรัพย์ (บาท)",
+      "collateralAddress": "ที่อยู่หลักทรัพย์",
+      "collateralDescription": "รายละเอียดหลักทรัพย์"
+    },
+    "placeholders": {
+      "fullName": "สมชาย ใจดี",
+      "nationalId": "1234567890123",
+      "phone": "0812345678",
+      "email": "email@example.com",
+      "purposeDetail": "อธิบายวัตถุประสงค์เพิ่มเติม...",
+      "collateralAddress": "ที่อยู่หรือรายละเอียดตำแหน่ง...",
+      "collateralDescription": "รายละเอียดเพิ่มเติม เช่น เลขโฉนด ทะเบียนรถ..."
+    },
+    "purpose": {
+      "BUSINESS": "ธุรกิจ",
+      "PERSONAL": "ใช้จ่ายส่วนตัว",
+      "EDUCATION": "การศึกษา",
+      "MEDICAL": "การแพทย์",
+      "OTHER": "อื่นๆ"
+    },
+    "collateral": {
+      "LAND": "ที่ดิน",
+      "HOUSE": "บ้าน",
+      "CONDO": "คอนโด",
+      "CAR": "รถยนต์",
+      "GOLD": "ทองคำ",
+      "OTHER": "อื่นๆ"
+    },
+    "documents": {
+      "ID_CARD": "บัตรประชาชน",
+      "HOUSE_REGISTRATION": "ทะเบียนบ้าน",
+      "COLLATERAL_DOC": "เอกสารหลักทรัพย์",
+      "COLLATERAL_PHOTO": "รูปหลักทรัพย์"
+    },
+    "pdpa": {
+      "consent": "ข้าพเจ้ายินยอมให้เก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคล ตาม",
+      "privacyPolicy": "นโยบายความเป็นส่วนตัว"
+    },
+    "submitButton": "ส่งคำขอสินเชื่อ",
+    "success": {
+      "title": "ส่งคำขอเรียบร้อย!",
+      "message": "เราจะพิจารณาคำขอของคุณและแจ้งผลผ่าน LINE ภายใน 1-2 วันทำการ",
+      "newApplication": "ส่งคำขอใหม่"
+    }
+  },
+  "validation": {
+    "fullName": {
+      "required": "กรุณากรอกชื่อ-นามสกุล"
+    },
+    "nationalId": {
+      "invalid": "เลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก"
+    },
+    "phone": {
+      "invalid": "เบอร์โทรต้องเป็นตัวเลข 10 หลัก"
+    },
+    "email": {
+      "invalid": "รูปแบบอีเมลไม่ถูกต้อง"
+    },
+    "requestedAmount": {
+      "min": "วงเงินขั้นต่ำ 10,000 บาท",
+      "max": "วงเงินสูงสุด 1,000,000 บาท"
+    },
+    "collateralValue": {
+      "required": "กรุณาระบุมูลค่าหลักทรัพย์"
+    },
+    "collateralAddress": {
+      "required": "กรุณาระบุที่อยู่หลักทรัพย์"
+    },
+    "pdpaConsent": {
+      "required": "กรุณายอมรับเงื่อนไข"
+    },
+    "fileSize": {
+      "tooLarge": "ไฟล์ใหญ่เกินไป (สูงสุด 5MB)"
+    }
+  },
+  "status": {
+    "title": "สถานะคำขอสินเชื่อ",
+    "noApplications": "ยังไม่มีคำขอสินเชื่อ",
+    "amount": "วงเงิน",
+    "submittedDate": "วันที่ยื่น",
+    "rejectionReason": "เหตุผล",
+    "statusLabels": {
+      "SUBMITTED": "ยื่นคำขอแล้ว",
+      "PENDING": "รอพิจารณา",
+      "PENDING_DOCS": "รอเอกสาร",
+      "APPROVED": "อนุมัติ",
+      "REJECTED": "ไม่อนุมัติ",
+      "DISBURSED": "รับเงินแล้ว"
+    }
+  },
+  "dashboard": {
+    "title": "แดชบอร์ด",
+    "metrics": {
+      "totalDisbursed": "ยอดปล่อยกู้",
+      "totalOutstanding": "ยอดคงค้าง",
+      "overdueCount": "ค้างชำระ",
+      "pendingApplications": "รออนุมัติ"
+    },
+    "contractSummary": {
+      "title": "สรุปสัญญา",
+      "total": "ทั้งหมด",
+      "active": "ใช้งาน",
+      "completed": "ปิดสัญญา",
+      "defaulted": "ผิดนัด"
+    },
+    "agingReport": {
+      "title": "Aging Report",
+      "current": "ปกติ",
+      "days1to7": "1-7 วัน",
+      "days8to30": "8-30 วัน",
+      "days31to60": "31-60 วัน",
+      "days60plus": "60+ วัน"
+    },
+    "pendingApplications": {
+      "title": "คำขอรออนุมัติ",
+      "empty": "ไม่มีคำขอรออนุมัติ"
+    },
+    "overdueContracts": {
+      "title": "ค้างชำระ",
+      "empty": "ไม่มีลูกหนี้ค้างชำระ",
+      "daysOverdue": "ค้าง {days} วัน"
+    },
+    "quickActions": {
+      "applications": "คำขอ",
+      "contracts": "สัญญา",
+      "payments": "ชำระเงิน",
+      "reports": "รายงาน"
+    }
+  },
+  "contracts": {
+    "title": "สัญญา",
+    "contractId": "เลขสัญญา",
+    "customerName": "ชื่อลูกค้า",
+    "approvedAmount": "วงเงินอนุมัติ",
+    "outstandingBalance": "ยอดคงค้าง",
+    "status": "สถานะ",
+    "daysOverdue": "ค้างชำระ",
+    "statusLabels": {
+      "ACTIVE": "ใช้งาน",
+      "COMPLETED": "ปิดสัญญา",
+      "DEFAULT": "ผิดนัด"
+    }
+  },
+  "payments": {
+    "title": "ชำระเงิน",
+    "paymentId": "รหัสชำระ",
+    "amount": "จำนวนเงิน",
+    "date": "วันที่ชำระ",
+    "status": "สถานะ",
+    "statusLabels": {
+      "PENDING": "รอตรวจสอบ",
+      "VERIFIED": "ตรวจสอบแล้ว",
+      "REJECTED": "ปฏิเสธ"
+    }
+  },
+  "webAdmin": {
+    "login": {
+      "title": "เข้าสู่ระบบผู้ดูแล",
+      "subtitle": "LINE Lender Admin",
+      "googleButton": "เข้าสู่ระบบด้วย Google",
+      "loginWithGoogle": "Sign in with Google"
+    },
+    "navigation": {
+      "dashboard": "แดชบอร์ด",
+      "applications": "คำขอสินเชื่อ",
+      "pendingApplications": "รออนุมัติ",
+      "contracts": "สัญญา",
+      "overdueContracts": "ค้างชำระ",
+      "payments": "การชำระเงิน",
+      "pendingPayments": "รอตรวจสอบ",
+      "recordPayment": "บันทึกชำระ",
+      "reports": "รายงาน",
+      "staff": "พนักงาน",
+      "settings": "ตั้งค่า",
+      "logout": "ออกจากระบบ"
+    },
+    "dashboard": {
+      "title": "แดชบอร์ด",
+      "subtitle": "ภาพรวมระบบจัดการสินเชื่อ",
+      "stats": {
+        "totalDisbursed": "ยอดปล่อยกู้",
+        "outstandingBalance": "ยอดคงค้าง",
+        "totalCollected": "ยอดเก็บได้",
+        "overdueContracts": "สัญญาค้างชำระ"
+      },
+      "quickStats": {
+        "activeContracts": "สัญญาที่ใช้งาน",
+        "completed": "ปิดสัญญาแล้ว",
+        "pendingApplications": "คำขอรออนุมัติ",
+        "pendingPayments": "รอตรวจสอบชำระ",
+        "collectionRate": "อัตราเก็บหนี้",
+        "onTimeRate": "อัตราชำระตรงเวลา"
+      },
+      "overdueSeverity": {
+        "title": "ค้างชำระตามระดับความรุนแรง",
+        "days1to7": "1-7 วัน",
+        "days8to30": "8-30 วัน",
+        "days31to60": "31-60 วัน",
+        "days60plus": "60+ วัน"
+      },
+      "agingReport": {
+        "title": "รายงาน Aging",
+        "viewDetails": "ดูรายละเอียด",
+        "current": "ปกติ",
+        "contracts": "สัญญา",
+        "noContracts": "ไม่มีสัญญาที่จะแสดง"
+      },
+      "overdueList": {
+        "title": "สัญญาค้างชำระ",
+        "viewAll": "ดูทั้งหมด",
+        "noOverdue": "ไม่มีสัญญาค้างชำระ!",
+        "allOnTime": "การชำระทั้งหมดตรงเวลา",
+        "daysLabel": "วัน"
+      },
+      "quickActions": {
+        "reviewApplications": "ตรวจสอบคำขอ",
+        "pending": "รอดำเนินการ",
+        "verifyPayments": "ยืนยันการชำระ",
+        "viewContracts": "ดูสัญญา",
+        "active": "ใช้งาน"
+      },
+      "systemStatus": {
+        "title": "สถานะระบบ",
+        "lineActive": "LINE Integration ทำงานปกติ",
+        "sheetsConnected": "เชื่อมต่อ Google Sheets แล้ว",
+        "databaseOnline": "ฐานข้อมูลออนไลน์"
+      },
+      "errors": {
+        "loadFailed": "ไม่สามารถโหลดข้อมูลแดชบอร์ดได้"
+      }
+    },
+    "sidebar": {
+      "overview": "ภาพรวม",
+      "dashboard": "แดชบอร์ด",
+      "applications": "คำขอสินเชื่อ",
+      "allApplications": "คำขอทั้งหมด",
+      "pendingReview": "รอตรวจสอบ",
+      "contracts": "สัญญา",
+      "allContracts": "สัญญาทั้งหมด",
+      "overdue": "ค้างชำระ",
+      "payments": "การชำระเงิน",
+      "allPayments": "การชำระทั้งหมด",
+      "pendingVerification": "รอยืนยัน",
+      "reports": "รายงาน",
+      "generateReports": "สร้างรายงาน",
+      "admin": "ผู้ดูแลระบบ",
+      "staffManagement": "จัดการพนักงาน",
+      "settings": "ตั้งค่า",
+      "signOut": "ออกจากระบบ",
+      "collapse": "ย่อเมนู",
+      "expand": "ขยายเมนู"
+    }
+  },
+  "errors": {
+    "userNotFound": "ไม่พบข้อมูลผู้ใช้",
+    "submitFailed": "ไม่สามารถส่งคำขอได้",
+    "fetchFailed": "ไม่สามารถโหลดข้อมูลได้",
+    "genericError": "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
+  },
+  "toasts": {
+    "applicationSubmitted": "ส่งคำขอสินเชื่อเรียบร้อยแล้ว",
+    "paymentRecorded": "บันทึกการชำระเงินเรียบร้อย",
+    "settingsSaved": "บันทึกการตั้งค่าเรียบร้อย"
+  },
+  "localeSwitcher": {
+    "language": "ภาษา",
+    "thai": "ไทย",
+    "english": "English"
+  }
+}
