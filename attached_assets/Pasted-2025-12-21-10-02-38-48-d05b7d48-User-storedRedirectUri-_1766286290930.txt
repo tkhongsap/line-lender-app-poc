@@ -1,0 +1,96 @@
+2025-12-21 10:02:38.48
+d05b7d48
+User
+storedRedirectUri: 'https://line-lender-app-poc--tkhongsap.replit.app/api/web-admin/callback',
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async d (.next/server/chunks/[root-of-the-server]__fe1f1fcd._.js:1:7834) {
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:43874)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+errno: -3001,
+2025-12-21 10:02:38.64
+d05b7d48
+User
+Callback error: Error: Failed query: select "id", "email", "first_name", "last_name", "profile_image_url", "role", "active", "created_at", "updated_at" from "web_admin_users" where "web_admin_users"."email" = $1
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async c (.next/server/chunks/[root-of-the-server]__fe1f1fcd._.js:1:6793)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+}
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:43874)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+code: 'EAI_AGAIN',
+2025-12-21 10:02:38.64
+d05b7d48
+User
+params: ta.khongsap@gmail.com
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async s (.next/server/chunks/[root-of-the-server]__fe1f1fcd._.js:1:2401)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+hostname: 'helium'
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at f.queryWithCache (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:40320)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+query: 'select "id", "email", "first_name", "last_name", "profile_image_url", "role", "active", "created_at", "updated_at" from "web_admin_users" where "web_admin_users"."email" = $1',
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async s (.next/server/chunks/[root-of-the-server]__fe1f1fcd._.js:1:2401)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async f.queryWithCache (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:40295)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async f (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:50125)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+syscall: 'getaddrinfo',
+2025-12-21 10:02:38.64
+d05b7d48
+User
+}
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async f (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:50125)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async c (.next/server/chunks/[root-of-the-server]__fe1f1fcd._.js:1:6793) {
+2025-12-21 10:02:38.64
+d05b7d48
+User
+at async (.next/server/chunks/[root-of-the-server]__0d320baf._.js:8:44089)
+2025-12-21 10:02:38.64
+d05b7d48
+User
+params: [Array],
+2025-12-21 10:02:38.64
+d05b7d48
+User
+[cause]: Error: getaddrinfo EAI_AGAIN helium
