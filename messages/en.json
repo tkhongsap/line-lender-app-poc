@@ -292,6 +292,27 @@
       "errors": {
         "loadFailed": "Failed to load dashboard data"
       }
+    },
+    "sidebar": {
+      "overview": "Overview",
+      "dashboard": "Dashboard",
+      "applications": "Applications",
+      "allApplications": "All Applications",
+      "pendingReview": "Pending Review",
+      "contracts": "Contracts",
+      "allContracts": "All Contracts",
+      "overdue": "Overdue",
+      "payments": "Payments",
+      "allPayments": "All Payments",
+      "pendingVerification": "Pending Verification",
+      "reports": "Reports",
+      "generateReports": "Generate Reports",
+      "admin": "Admin",
+      "staffManagement": "Staff Management",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "collapse": "Collapse sidebar",
+      "expand": "Expand sidebar"
     }
   },
   "errors": {

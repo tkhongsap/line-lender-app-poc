@@ -89,7 +89,7 @@ export function LocaleSwitcherMinimal() {
       className="gap-1 text-muted-foreground hover:text-foreground"
     >
       <Globe className="h-4 w-4" />
-      <span className="text-xs uppercase">{locale === 'th' ? 'EN' : 'TH'}</span>
+      <span className="text-xs uppercase">{locale === 'th' ? 'TH' : 'EN'}</span>
     </Button>
   );
 }

@@ -290,6 +290,27 @@
       "errors": {
         "loadFailed": "ไม่สามารถโหลดข้อมูลแดชบอร์ดได้"
       }
+    },
+    "sidebar": {
+      "overview": "ภาพรวม",
+      "dashboard": "แดชบอร์ด",
+      "applications": "คำขอสินเชื่อ",
+      "allApplications": "คำขอทั้งหมด",
+      "pendingReview": "รอตรวจสอบ",
+      "contracts": "สัญญา",
+      "allContracts": "สัญญาทั้งหมด",
+      "overdue": "ค้างชำระ",
+      "payments": "การชำระเงิน",
+      "allPayments": "การชำระทั้งหมด",
+      "pendingVerification": "รอยืนยัน",
+      "reports": "รายงาน",
+      "generateReports": "สร้างรายงาน",
+      "admin": "ผู้ดูแลระบบ",
+      "staffManagement": "จัดการพนักงาน",
+      "settings": "ตั้งค่า",
+      "signOut": "ออกจากระบบ",
+      "collapse": "ย่อเมนู",
+      "expand": "ขยายเมนู"
     }
   },
   "errors": {
