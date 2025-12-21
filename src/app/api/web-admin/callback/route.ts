@@ -1,0 +1,87 @@
+import { NextRequest, NextResponse } from 'next/server';
+import * as client from 'openid-client';
+import { createSession, upsertWebAdminUser, getWebAdminUserByEmail, SESSION_COOKIE_NAME } from '@/lib/web-auth';
+import type { UserRole } from '@/types';
+
+const ISSUER_URL = process.env.ISSUER_URL ?? 'https://replit.com/oidc';
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
+  
+  const host = request.headers.get('host') || request.headers.get('x-forwarded-host') || '';
+  const protocol = request.headers.get('x-forwarded-proto') || 'https';
+  const baseUrl = `${protocol}://${host}`;
+  
+  if (!code) {
+    return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_code`);
+  }
+  
+  let redirectTo = '/web-admin/dashboard';
+  if (state) {
+    try {
+      const stateData = JSON.parse(Buffer.from(state, 'base64url').toString());
+      redirectTo = stateData.redirect || redirectTo;
+    } catch (e) {
+      // Ignore state parsing errors
+    }
+  }
+  
+  try {
+    const config = await client.discovery(
+      new URL(ISSUER_URL),
+      process.env.REPL_ID!
+    );
+    
+    const tokens = await client.authorizationCodeGrant(config, new URL(request.url), {
+      expectedState: state || undefined,
+    });
+    
+    const claims = tokens.claims();
+    
+    if (!claims || !claims.email) {
+      return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_email`);
+    }
+    
+    const dbUser = await getWebAdminUserByEmail(claims.email as string);
+    
+    if (!dbUser || dbUser.active !== 'true') {
+      return NextResponse.redirect(`${baseUrl}/web-admin/login?error=not_authorized`);
+    }
+    
+    await upsertWebAdminUser({
+      id: claims.sub as string,
+      email: claims.email as string,
+      firstName: claims.first_name as string | undefined,
+      lastName: claims.last_name as string | undefined,
+      profileImageUrl: claims.profile_image_url as string | undefined,
+    });
+    
+    const sessionId = await createSession({
+      userId: claims.sub as string,
+      email: claims.email as string,
+      firstName: claims.first_name as string | undefined,
+      lastName: claims.last_name as string | undefined,
+      profileImageUrl: claims.profile_image_url as string | undefined,
+      role: dbUser.role as UserRole,
+      accessToken: tokens.access_token!,
+      refreshToken: tokens.refresh_token,
+      expiresAt: claims.exp || (Math.floor(Date.now() / 1000) + 3600),
+    });
+    
+    const response = NextResponse.redirect(new URL(redirectTo, baseUrl));
+    response.cookies.set(SESSION_COOKIE_NAME, sessionId, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('Callback error:', error);
+    return NextResponse.redirect(`${baseUrl}/web-admin/login?error=auth_failed`);
+  }
+}

@@ -13,6 +13,7 @@ import {
 import { uploadApplicationDocuments } from '@/lib/google-drive';
 import { notifyNewApplication } from '@/lib/line';
 import { createAuthContext, requireAuth, getAdminUsers } from '@/lib/auth';
+import { getWebAdminAuthContext } from '@/lib/web-auth';
 import type { ApplicationFormData, ApplicationStatus, LoanPurpose, CollateralType } from '@/types';
 
 // Validation schema for new application
@@ -47,18 +48,27 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status') as ApplicationStatus | null;
     const lineUserId = searchParams.get('lineUserId');
 
-    // Get auth context from headers
     const authLineUserId = request.headers.get('x-line-userid');
-    const authContext = await createAuthContext(authLineUserId);
+    let authContext = await createAuthContext(authLineUserId);
+    
+    if (!authContext.isAuthenticated || authLineUserId === 'web-admin') {
+      const webAdminContext = await getWebAdminAuthContext();
+      if (webAdminContext.isAuthenticated) {
+        authContext = {
+          user: null,
+          isAuthenticated: true,
+          isAdmin: webAdminContext.isAdmin,
+          permissions: [],
+        };
+      }
+    }
 
-    // Build filters based on auth
     const filters: { status?: ApplicationStatus; lineUserId?: string } = {};
 
     if (status) {
       filters.status = status;
     }
 
-    // Non-admins can only see their own applications
     if (!authContext.isAdmin && authContext.user) {
       filters.lineUserId = authContext.user.lineUserId;
     } else if (lineUserId) {
