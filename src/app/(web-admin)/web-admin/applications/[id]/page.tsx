@@ -349,7 +349,7 @@ function ApplicationDetailContent() {
                   Approve
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-slate-800 border-slate-700">
+              <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto max-h-[85vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-white">Approve Loan Application</DialogTitle>
                 </DialogHeader>
@@ -430,7 +430,7 @@ function ApplicationDetailContent() {
                   Reject
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-slate-800 border-slate-700">
+              <DialogContent className="bg-slate-800 border-slate-700 w-[calc(100%-2rem)] max-w-md sm:max-w-lg mx-auto">
                 <DialogHeader>
                   <DialogTitle className="text-white">Reject Application</DialogTitle>
                 </DialogHeader>

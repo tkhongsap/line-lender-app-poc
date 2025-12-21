@@ -13,6 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from '@/components/ui/dropdown-menu';
 import {
   CreditCard,
@@ -23,10 +24,29 @@ import {
   X,
   LogOut,
   ChevronDown,
+  FolderOpen,
+  DollarSign,
+  Settings,
+  Clock,
+  AlertTriangle,
+  BarChart3,
 } from 'lucide-react';
 
 interface WebAdminNavigationProps {
   children: React.ReactNode;
+}
+
+interface NavItem {
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  badge?: number;
+  adminOnly?: boolean;
+}
+
+interface NavGroup {
+  label: string;
+  items: NavItem[];
 }
 
 export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
@@ -34,10 +54,59 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
+  // Main navigation items (flat for header)
+  const mainNavItems: NavItem[] = [
     { href: '/web-admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/web-admin/applications', icon: FileText, label: 'Applications' },
-    { href: '/web-admin/applications/pending', icon: Users, label: 'Pending' },
+    { href: '/web-admin/contracts', icon: FolderOpen, label: 'Contracts' },
+    { href: '/web-admin/payments', icon: DollarSign, label: 'Payments' },
+    { href: '/web-admin/reports', icon: BarChart3, label: 'Reports' },
+  ];
+
+  // Full navigation with groups (for mobile menu)
+  const navGroups: NavGroup[] = [
+    {
+      label: 'Overview',
+      items: [
+        { href: '/web-admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+      ],
+    },
+    {
+      label: 'Applications',
+      items: [
+        { href: '/web-admin/applications', icon: FileText, label: 'All Applications' },
+        { href: '/web-admin/applications/pending', icon: Clock, label: 'Pending Review' },
+      ],
+    },
+    {
+      label: 'Contracts',
+      items: [
+        { href: '/web-admin/contracts', icon: FolderOpen, label: 'All Contracts' },
+        { href: '/web-admin/contracts/overdue', icon: AlertTriangle, label: 'Overdue' },
+      ],
+    },
+    {
+      label: 'Payments',
+      items: [
+        { href: '/web-admin/payments', icon: DollarSign, label: 'All Payments' },
+        { href: '/web-admin/payments/pending', icon: Clock, label: 'Pending Verification' },
+      ],
+    },
+    {
+      label: 'Reports',
+      items: [
+        { href: '/web-admin/reports', icon: BarChart3, label: 'Generate Reports' },
+      ],
+    },
+    {
+      label: 'Admin',
+      items: [
+        { href: '/web-admin/staff', icon: Users, label: 'Staff Management', adminOnly: true },
+        { href: '/web-admin/settings', icon: Settings, label: 'Settings', adminOnly: true },
+      ],
+    },
   ];
 
   const getInitials = () => {
@@ -45,6 +114,13 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
       return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
     }
     return user?.email?.[0]?.toUpperCase() || 'U';
+  };
+
+  const isActive = (href: string) => {
+    if (href === '/web-admin/dashboard') {
+      return pathname === href;
+    }
+    return pathname === href || pathname.startsWith(href + '/');
   };
 
   return (
@@ -56,36 +132,92 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                 <CreditCard className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg text-white">LINE Lender</span>
+              <span className="font-bold text-lg text-white hidden sm:inline">LINE Lender</span>
             </Link>
-            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
+            <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
               Staff Portal
             </span>
           </div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={`gap-2 ${
-                      isActive
-                        ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.label}
-                  </Button>
-                </Link>
-              );
-            })}
+            {mainNavItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    isActive(item.href)
+                      ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  <item.icon className="w-4 h-4" />
+                  {item.label}
+                </Button>
+              </Link>
+            ))}
+
+            {/* More Dropdown for Admin */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1 text-slate-300 hover:text-white hover:bg-slate-800"
+                >
+                  More
+                  <ChevronDown className="w-3 h-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-slate-400 text-xs">Quick Links</DropdownMenuLabel>
+                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                    <Link href="/web-admin/applications/pending">
+                      <Clock className="w-4 h-4 mr-2" />
+                      Pending Applications
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                    <Link href="/web-admin/contracts/overdue">
+                      <AlertTriangle className="w-4 h-4 mr-2" />
+                      Overdue Contracts
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                    <Link href="/web-admin/payments/pending">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Pending Payments
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                {isSuperAdmin && (
+                  <>
+                    <DropdownMenuSeparator className="bg-slate-700" />
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel className="text-slate-400 text-xs">Admin</DropdownMenuLabel>
+                      <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                        <Link href="/web-admin/staff">
+                          <Users className="w-4 h-4 mr-2" />
+                          Staff Management
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                        <Link href="/web-admin/settings">
+                          <Settings className="w-4 h-4 mr-2" />
+                          Settings
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* User Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 text-slate-300 hover:text-white">
@@ -99,10 +231,10 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-slate-800 border-slate-700">
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
                 <DropdownMenuLabel className="text-slate-300">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">
+                    <p className="text-sm font-medium truncate">
                       {user?.firstName} {user?.lastName}
                     </p>
                     <p className="text-xs text-slate-400">{user?.email}</p>
@@ -120,6 +252,7 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="icon"
@@ -131,25 +264,43 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
           </div>
         </div>
 
+        {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-700 bg-slate-900 p-4">
-            <nav className="flex flex-col gap-2">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+          <div className="md:hidden border-t border-slate-700 bg-slate-900 p-4 max-h-[80vh] overflow-y-auto">
+            <nav className="flex flex-col gap-4">
+              {navGroups.map((group) => {
+                const visibleItems = group.items.filter(
+                  (item) => !item.adminOnly || isSuperAdmin
+                );
+                if (visibleItems.length === 0) return null;
+
                 return (
-                  <Link key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="ghost"
-                      className={`w-full justify-start gap-3 ${
-                        isActive
-                          ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                          : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      {item.label}
-                    </Button>
-                  </Link>
+                  <div key={group.label}>
+                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
+                      {group.label}
+                    </p>
+                    <div className="flex flex-col gap-1">
+                      {visibleItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <Button
+                            variant="ghost"
+                            className={`w-full justify-start gap-3 ${
+                              isActive(item.href)
+                                ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
+                                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                            }`}
+                          >
+                            <item.icon className="w-5 h-5" />
+                            {item.label}
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 );
               })}
             </nav>

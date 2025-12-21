@@ -69,10 +69,10 @@ function ApplicationsContent() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Applications</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white">Applications</h1>
           <p className="text-slate-400 mt-1">
             {filteredApplications.length} applications found
           </p>
@@ -111,7 +111,7 @@ function ApplicationsContent() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-sm text-slate-400">{app.id}</span>
+                      <span className="font-mono text-sm text-slate-400 truncate max-w-[100px] sm:max-w-none">{app.id}</span>
                       <Badge className={statusColors[app.status]}>
                         {statusLabels[app.status]}
                       </Badge>

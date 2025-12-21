@@ -773,3 +773,44 @@ export async function getSetting(key: string): Promise<string | null> {
   return settings[key] || null;
 }
 
+export async function updateSettings(updates: Record<string, string>): Promise<void> {
+  const sheets = getSheetsClient();
+  const spreadsheetId = getSpreadsheetId();
+  
+  // Get current settings data
+  const data = await getSheetData(SHEETS.SETTINGS);
+  
+  // Create a map of existing keys to row indices
+  const keyRowMap: Record<string, number> = {};
+  data.forEach((row, index) => {
+    if (index > 0 && row[0]) {
+      keyRowMap[row[0]] = index + 1; // +1 because sheets are 1-indexed
+    }
+  });
+  
+  // Process each update
+  for (const [key, value] of Object.entries(updates)) {
+    if (keyRowMap[key]) {
+      // Update existing row
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `${SHEETS.SETTINGS}!A${keyRowMap[key]}:B${keyRowMap[key]}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [[key, value]],
+        },
+      });
+    } else {
+      // Append new row
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: `${SHEETS.SETTINGS}!A:B`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [[key, value]],
+        },
+      });
+    }
+  }
+}
+
