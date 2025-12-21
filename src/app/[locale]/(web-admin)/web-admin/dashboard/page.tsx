@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { WebAdminGuard } from '@/components/web-admin/WebAdminGuard';
 import { WebAdminNavigation } from '@/components/web-admin/WebAdminNavigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +22,7 @@ import {
   ArrowRight,
   Percent,
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import type { Contract, Application, Payment } from '@/types';
 
 interface DashboardData {
@@ -32,6 +33,7 @@ interface DashboardData {
 
 interface AgingData {
   category: string;
+  filter: string;
   count: number;
   amount: number;
   color: string;
@@ -49,6 +51,7 @@ function formatCurrency(amount: number): string {
 
 function DashboardContent() {
   const router = useRouter();
+  const t = useTranslations('webAdmin.dashboard');
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -96,7 +99,7 @@ function DashboardContent() {
         <Card className="bg-destructive/10 border-destructive/30">
           <CardContent className="py-12 text-center">
             <AlertTriangle className="w-12 h-12 text-destructive mx-auto mb-4" />
-            <p className="text-destructive">Failed to load dashboard data</p>
+            <p className="text-destructive">{t('errors.loadFailed')}</p>
           </CardContent>
         </Card>
       </div>
@@ -134,7 +137,8 @@ function DashboardContent() {
   // Calculate aging report data
   const agingData: AgingData[] = [
     {
-      category: 'Current',
+      category: t('agingReport.current'),
+      filter: 'current',
       count: contracts.filter((c) => c.status === 'ACTIVE' && c.daysOverdue === 0).length,
       amount: contracts
         .filter((c) => c.status === 'ACTIVE' && c.daysOverdue === 0)
@@ -143,7 +147,8 @@ function DashboardContent() {
       bgColor: 'bg-green-500',
     },
     {
-      category: '1-7 days',
+      category: t('overdueSeverity.days1to7'),
+      filter: '1-7',
       count: contracts.filter((c) => c.daysOverdue >= 1 && c.daysOverdue <= 7).length,
       amount: contracts
         .filter((c) => c.daysOverdue >= 1 && c.daysOverdue <= 7)
@@ -152,7 +157,8 @@ function DashboardContent() {
       bgColor: 'bg-yellow-500',
     },
     {
-      category: '8-30 days',
+      category: t('overdueSeverity.days8to30'),
+      filter: '8-30',
       count: contracts.filter((c) => c.daysOverdue >= 8 && c.daysOverdue <= 30).length,
       amount: contracts
         .filter((c) => c.daysOverdue >= 8 && c.daysOverdue <= 30)
@@ -161,7 +167,8 @@ function DashboardContent() {
       bgColor: 'bg-orange-500',
     },
     {
-      category: '31-60 days',
+      category: t('overdueSeverity.days31to60'),
+      filter: '31-60',
       count: contracts.filter((c) => c.daysOverdue >= 31 && c.daysOverdue <= 60).length,
       amount: contracts
         .filter((c) => c.daysOverdue >= 31 && c.daysOverdue <= 60)
@@ -170,7 +177,8 @@ function DashboardContent() {
       bgColor: 'bg-red-500',
     },
     {
-      category: '60+ days',
+      category: t('overdueSeverity.days60plus'),
+      filter: '60+',
       count: contracts.filter((c) => c.daysOverdue > 60).length,
       amount: contracts
         .filter((c) => c.daysOverdue > 60)
@@ -189,28 +197,28 @@ function DashboardContent() {
 
   const statCards = [
     {
-      title: 'Total Disbursed',
+      title: t('stats.totalDisbursed'),
       value: formatCurrency(totalDisbursed),
       icon: DollarSign,
       color: 'text-green-600',
       bgColor: 'bg-green-500/10',
     },
     {
-      title: 'Outstanding Balance',
+      title: t('stats.outstandingBalance'),
       value: formatCurrency(totalOutstanding),
       icon: TrendingUp,
       color: 'text-blue-600',
       bgColor: 'bg-blue-500/10',
     },
     {
-      title: 'Total Collected',
+      title: t('stats.totalCollected'),
       value: formatCurrency(totalCollected),
       icon: CheckCircle,
       color: 'text-purple-600',
       bgColor: 'bg-purple-500/10',
     },
     {
-      title: 'Overdue Contracts',
+      title: t('stats.overdueContracts'),
       value: overdueContracts.length,
       icon: AlertTriangle,
       color: overdueContracts.length > 0 ? 'text-red-600' : 'text-green-600',
@@ -219,29 +227,29 @@ function DashboardContent() {
   ];
 
   const quickStats = [
-    { label: 'Active Contracts', value: activeContracts, color: 'text-green-600' },
-    { label: 'Completed', value: completedContracts, color: 'text-blue-600' },
-    { label: 'Pending Applications', value: pendingApplications, color: 'text-yellow-600' },
-    { label: 'Pending Payments', value: pendingPayments, color: 'text-orange-600' },
+    { label: t('quickStats.activeContracts'), value: activeContracts, color: 'text-green-600' },
+    { label: t('quickStats.completed'), value: completedContracts, color: 'text-blue-600' },
+    { label: t('quickStats.pendingApplications'), value: pendingApplications, color: 'text-yellow-600' },
+    { label: t('quickStats.pendingPayments'), value: pendingPayments, color: 'text-orange-600' },
   ];
 
   const rateStats = [
-    { label: 'Collection Rate', value: `${collectionRate}%`, color: collectionRate >= 80 ? 'text-green-600' : collectionRate >= 50 ? 'text-yellow-600' : 'text-red-600' },
-    { label: 'On-Time Payment Rate', value: `${onTimeRate}%`, color: onTimeRate >= 80 ? 'text-green-600' : onTimeRate >= 50 ? 'text-yellow-600' : 'text-red-600' },
+    { label: t('quickStats.collectionRate'), value: `${collectionRate}%`, color: collectionRate >= 80 ? 'text-green-600' : collectionRate >= 50 ? 'text-yellow-600' : 'text-red-600' },
+    { label: t('quickStats.onTimeRate'), value: `${onTimeRate}%`, color: onTimeRate >= 80 ? 'text-green-600' : onTimeRate >= 50 ? 'text-yellow-600' : 'text-red-600' },
   ];
 
   const overdueBySeverity = [
-    { label: '1-7 days', count: overdue1to7, color: 'text-yellow-600', bgColor: 'bg-yellow-500/20', filter: '1-7' },
-    { label: '8-30 days', count: overdue8to30, color: 'text-orange-600', bgColor: 'bg-orange-500/20', filter: '8-30' },
-    { label: '31-60 days', count: overdue31to60, color: 'text-red-600', bgColor: 'bg-red-500/20', filter: '31-60' },
-    { label: '60+ days', count: overdue60plus, color: 'text-red-700', bgColor: 'bg-red-600/20', filter: '60+' },
+    { label: t('overdueSeverity.days1to7'), count: overdue1to7, color: 'text-yellow-600', bgColor: 'bg-yellow-500/20', filter: '1-7' },
+    { label: t('overdueSeverity.days8to30'), count: overdue8to30, color: 'text-orange-600', bgColor: 'bg-orange-500/20', filter: '8-30' },
+    { label: t('overdueSeverity.days31to60'), count: overdue31to60, color: 'text-red-600', bgColor: 'bg-red-500/20', filter: '31-60' },
+    { label: t('overdueSeverity.days60plus'), count: overdue60plus, color: 'text-red-700', bgColor: 'bg-red-600/20', filter: '60+' },
   ];
 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Overview of your loan management system</p>
+        <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t('title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('subtitle')}</p>
       </div>
 
       {/* Main Stats */}
@@ -286,7 +294,7 @@ function DashboardContent() {
           <CardHeader className="pb-3">
             <CardTitle className="text-foreground text-base flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-red-600" />
-              Overdue by Severity
+              {t('overdueSeverity.title')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -312,38 +320,27 @@ function DashboardContent() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-foreground flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              Aging Report
+              {t('agingReport.title')}
             </CardTitle>
             <Link href="/web-admin/contracts/overdue">
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                View Details
+                {t('agingReport.viewDetails')}
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
           </CardHeader>
           <CardContent className="space-y-4">
-            {agingData.map((item) => {
-              // Determine the filter to apply when clicked
-              const filterMap: Record<string, string> = {
-                'Current': 'current',
-                '1-7 Days': '1-7',
-                '8-30 Days': '8-30',
-                '31-60 Days': '31-60',
-                '60+ Days': '60+',
-              };
-              const filterValue = filterMap[item.category] || 'all';
-
-              return (
+            {agingData.map((item) => (
                 <button
-                  key={item.category}
-                  onClick={() => router.push(`/web-admin/contracts?overdueFilter=${filterValue}`)}
+                  key={item.filter}
+                  onClick={() => router.push(`/web-admin/contracts?overdueFilter=${item.filter}`)}
                   className="w-full space-y-2 text-left hover:opacity-80 transition-opacity"
                   disabled={item.count === 0}
                 >
                   <div className="flex items-center justify-between text-sm">
                     <span className={item.color}>{item.category}</span>
                     <span className="text-muted-foreground">
-                      {item.count} contracts • {formatCurrency(item.amount)}
+                      {item.count} {t('agingReport.contracts')} • {formatCurrency(item.amount)}
                     </span>
                   </div>
                   <div className="h-3 bg-muted rounded-full overflow-hidden">
@@ -353,12 +350,11 @@ function DashboardContent() {
                     />
                   </div>
                 </button>
-              );
-            })}
+            ))}
             {agingData.every((d) => d.count === 0) && (
               <div className="text-center py-8 text-muted-foreground">
                 <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-600 opacity-50" />
-                <p>No contracts to display</p>
+                <p>{t('agingReport.noContracts')}</p>
               </div>
             )}
           </CardContent>
@@ -369,11 +365,11 @@ function DashboardContent() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-foreground flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-red-600" />
-              Overdue Contracts
+              {t('overdueList.title')}
             </CardTitle>
             <Link href="/web-admin/contracts/overdue">
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                View All
+                {t('overdueList.viewAll')}
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
@@ -382,8 +378,8 @@ function DashboardContent() {
             {topOverdue.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-600 opacity-50" />
-                <p>No overdue contracts!</p>
-                <p className="text-sm text-tertiary mt-1">All payments are on time.</p>
+                <p>{t('overdueList.noOverdue')}</p>
+                <p className="text-sm text-tertiary mt-1">{t('overdueList.allOnTime')}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -440,8 +436,8 @@ function DashboardContent() {
                   <Clock className="w-6 h-6 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Review Applications</p>
-                  <p className="text-sm text-muted-foreground">{pendingApplications} pending</p>
+                  <p className="font-medium text-foreground">{t('quickActions.reviewApplications')}</p>
+                  <p className="text-sm text-muted-foreground">{pendingApplications} {t('quickActions.pending')}</p>
                 </div>
               </div>
             </CardContent>
@@ -456,8 +452,8 @@ function DashboardContent() {
                   <DollarSign className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Verify Payments</p>
-                  <p className="text-sm text-muted-foreground">{pendingPayments} pending</p>
+                  <p className="font-medium text-foreground">{t('quickActions.verifyPayments')}</p>
+                  <p className="text-sm text-muted-foreground">{pendingPayments} {t('quickActions.pending')}</p>
                 </div>
               </div>
             </CardContent>
@@ -472,8 +468,8 @@ function DashboardContent() {
                   <Users className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">View Contracts</p>
-                  <p className="text-sm text-muted-foreground">{activeContracts} active</p>
+                  <p className="font-medium text-foreground">{t('quickActions.viewContracts')}</p>
+                  <p className="text-sm text-muted-foreground">{activeContracts} {t('quickActions.active')}</p>
                 </div>
               </div>
             </CardContent>
@@ -484,21 +480,21 @@ function DashboardContent() {
       {/* System Status */}
       <Card className="border shadow-line">
         <CardHeader>
-          <CardTitle className="text-foreground">System Status</CardTitle>
+          <CardTitle className="text-foreground">{t('systemStatus.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-muted-foreground">LINE Integration Active</span>
+              <span className="text-muted-foreground">{t('systemStatus.lineActive')}</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-muted-foreground">Google Sheets Connected</span>
+              <span className="text-muted-foreground">{t('systemStatus.sheetsConnected')}</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-muted-foreground">Database Online</span>
+              <span className="text-muted-foreground">{t('systemStatus.databaseOnline')}</span>
             </div>
           </div>
         </CardContent>

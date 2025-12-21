@@ -235,6 +235,61 @@
       "staff": "พนักงาน",
       "settings": "ตั้งค่า",
       "logout": "ออกจากระบบ"
+    },
+    "dashboard": {
+      "title": "แดชบอร์ด",
+      "subtitle": "ภาพรวมระบบจัดการสินเชื่อ",
+      "stats": {
+        "totalDisbursed": "ยอดปล่อยกู้",
+        "outstandingBalance": "ยอดคงค้าง",
+        "totalCollected": "ยอดเก็บได้",
+        "overdueContracts": "สัญญาค้างชำระ"
+      },
+      "quickStats": {
+        "activeContracts": "สัญญาที่ใช้งาน",
+        "completed": "ปิดสัญญาแล้ว",
+        "pendingApplications": "คำขอรออนุมัติ",
+        "pendingPayments": "รอตรวจสอบชำระ",
+        "collectionRate": "อัตราเก็บหนี้",
+        "onTimeRate": "อัตราชำระตรงเวลา"
+      },
+      "overdueSeverity": {
+        "title": "ค้างชำระตามระดับความรุนแรง",
+        "days1to7": "1-7 วัน",
+        "days8to30": "8-30 วัน",
+        "days31to60": "31-60 วัน",
+        "days60plus": "60+ วัน"
+      },
+      "agingReport": {
+        "title": "รายงาน Aging",
+        "viewDetails": "ดูรายละเอียด",
+        "current": "ปกติ",
+        "contracts": "สัญญา",
+        "noContracts": "ไม่มีสัญญาที่จะแสดง"
+      },
+      "overdueList": {
+        "title": "สัญญาค้างชำระ",
+        "viewAll": "ดูทั้งหมด",
+        "noOverdue": "ไม่มีสัญญาค้างชำระ!",
+        "allOnTime": "การชำระทั้งหมดตรงเวลา",
+        "daysLabel": "วัน"
+      },
+      "quickActions": {
+        "reviewApplications": "ตรวจสอบคำขอ",
+        "pending": "รอดำเนินการ",
+        "verifyPayments": "ยืนยันการชำระ",
+        "viewContracts": "ดูสัญญา",
+        "active": "ใช้งาน"
+      },
+      "systemStatus": {
+        "title": "สถานะระบบ",
+        "lineActive": "LINE Integration ทำงานปกติ",
+        "sheetsConnected": "เชื่อมต่อ Google Sheets แล้ว",
+        "databaseOnline": "ฐานข้อมูลออนไลน์"
+      },
+      "errors": {
+        "loadFailed": "ไม่สามารถโหลดข้อมูลแดชบอร์ดได้"
+      }
     }
   },
   "errors": {

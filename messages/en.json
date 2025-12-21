@@ -26,6 +26,7 @@
   },
   "navigation": {
     "customer": {
+      "home": "Home",
       "apply": "Apply for Loan",
       "status": "Status",
       "payment": "Payment",
@@ -35,6 +36,7 @@
     "admin": {
       "dashboard": "Dashboard",
       "applications": "Loan Applications",
+      "pendingApplications": "Pending Approval",
       "contracts": "Contracts",
       "payments": "Payments",
       "reports": "Reports",
@@ -235,6 +237,61 @@
       "staff": "Staff",
       "settings": "Settings",
       "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of your loan management system",
+      "stats": {
+        "totalDisbursed": "Total Disbursed",
+        "outstandingBalance": "Outstanding Balance",
+        "totalCollected": "Total Collected",
+        "overdueContracts": "Overdue Contracts"
+      },
+      "quickStats": {
+        "activeContracts": "Active Contracts",
+        "completed": "Completed",
+        "pendingApplications": "Pending Applications",
+        "pendingPayments": "Pending Payments",
+        "collectionRate": "Collection Rate",
+        "onTimeRate": "On-Time Payment Rate"
+      },
+      "overdueSeverity": {
+        "title": "Overdue by Severity",
+        "days1to7": "1-7 days",
+        "days8to30": "8-30 days",
+        "days31to60": "31-60 days",
+        "days60plus": "60+ days"
+      },
+      "agingReport": {
+        "title": "Aging Report",
+        "viewDetails": "View Details",
+        "current": "Current",
+        "contracts": "contracts",
+        "noContracts": "No contracts to display"
+      },
+      "overdueList": {
+        "title": "Overdue Contracts",
+        "viewAll": "View All",
+        "noOverdue": "No overdue contracts!",
+        "allOnTime": "All payments are on time.",
+        "daysLabel": "d"
+      },
+      "quickActions": {
+        "reviewApplications": "Review Applications",
+        "pending": "pending",
+        "verifyPayments": "Verify Payments",
+        "viewContracts": "View Contracts",
+        "active": "active"
+      },
+      "systemStatus": {
+        "title": "System Status",
+        "lineActive": "LINE Integration Active",
+        "sheetsConnected": "Google Sheets Connected",
+        "databaseOnline": "Database Online"
+      },
+      "errors": {
+        "loadFailed": "Failed to load dashboard data"
+      }
     }
   },
   "errors": {
