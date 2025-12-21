@@ -5,6 +5,7 @@ import type { UserRole } from '@/types';
 
 const ISSUER_URL = process.env.ISSUER_URL ?? 'https://replit.com/oidc';
 const CODE_VERIFIER_COOKIE = 'pkce_code_verifier';
+const REDIRECT_URI_COOKIE = 'oauth_redirect_uri';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -21,8 +22,12 @@ export async function GET(request: NextRequest) {
   
   const codeVerifier = request.cookies.get(CODE_VERIFIER_COOKIE)?.value;
   if (!codeVerifier) {
+    console.log('No code verifier cookie found. Available cookies:', request.cookies.getAll().map(c => c.name));
     return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_verifier`);
   }
+  
+  const storedRedirectUri = request.cookies.get(REDIRECT_URI_COOKIE)?.value;
+  const redirectUri = storedRedirectUri || `${baseUrl}/api/web-admin/callback`;
   
   let redirectTo = '/web-admin/dashboard';
   if (state) {
@@ -40,7 +45,19 @@ export async function GET(request: NextRequest) {
       process.env.REPL_ID!
     );
     
-    const tokens = await client.authorizationCodeGrant(config, new URL(request.url), {
+    const callbackUrl = new URL(redirectUri);
+    callbackUrl.searchParams.set('code', code);
+    if (state) callbackUrl.searchParams.set('state', state);
+    
+    console.log('Token exchange details:', {
+      baseUrl,
+      storedRedirectUri,
+      callbackUrl: callbackUrl.toString(),
+      requestUrl: request.url,
+      codeVerifierLength: codeVerifier?.length,
+    });
+    
+    const tokens = await client.authorizationCodeGrant(config, callbackUrl, {
       expectedState: state || undefined,
       pkceCodeVerifier: codeVerifier,
       idTokenExpected: true,
@@ -102,6 +119,7 @@ export async function GET(request: NextRequest) {
     });
     
     response.cookies.delete(CODE_VERIFIER_COOKIE);
+    response.cookies.delete(REDIRECT_URI_COOKIE);
     
     return response;
   } catch (error) {
