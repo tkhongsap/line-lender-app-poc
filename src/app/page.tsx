@@ -35,8 +35,8 @@ export default function Home() {
             <Link href="/status" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               ตรวจสอบสถานะ
             </Link>
-            <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              ผู้ดูแลระบบ
+            <Link href="/web-admin/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              เข้าสู่ระบบ (พนักงาน)
             </Link>
           </nav>
           <Link href="/apply">
@@ -273,10 +273,10 @@ export default function Home() {
                 แดชบอร์ดครบครัน ดูภาพรวมสินเชื่อ อนุมัติคำขอ ติดตามหนี้ และออกรายงานได้ในที่เดียว 
                 เข้าถึงได้จากทุกอุปกรณ์
               </p>
-              <Link href="/dashboard">
+              <Link href="/web-admin/login">
                 <Button size="lg" className="h-14 px-8 text-base font-semibold bg-white text-gray-900 hover:bg-white/90">
                   <BarChart3 className="w-5 h-5 mr-2" />
-                  เข้าสู่แดชบอร์ด
+                  เข้าสู่ระบบพนักงาน
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
@@ -356,8 +356,8 @@ export default function Home() {
               <Link href="/contracts" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 สัญญา
               </Link>
-              <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                ผู้ดูแล
+              <Link href="/web-admin/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                พนักงาน
               </Link>
             </nav>
             
