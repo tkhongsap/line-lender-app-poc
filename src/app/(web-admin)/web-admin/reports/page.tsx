@@ -584,9 +584,14 @@ function ReportsContent() {
                   { key: 'days60plus', label: '60+ days', color: 'red' },
                 ].map(({ key, label, color }) => {
                   const data = report.aging[key as keyof AgingData];
+                  // Map color strings to actual Tailwind classes
+                  const colorClass = color === 'green' ? 'text-green-400' 
+                    : color === 'yellow' ? 'text-yellow-400'
+                    : color === 'orange' ? 'text-orange-400'
+                    : 'text-red-400';
                   return (
                     <div key={key} className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                      <span className={`text-${color}-400`}>{label}</span>
+                      <span className={colorClass}>{label}</span>
                       <div className="text-right">
                         <span className="text-white font-semibold">{data.count} contracts</span>
                         <span className="text-slate-400 ml-2">({formatCurrency(data.amount)})</span>
