@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
     const tokens = await client.authorizationCodeGrant(config, new URL(request.url), {
       expectedState: state || undefined,
       pkceCodeVerifier: codeVerifier,
+      idTokenExpected: true,
     });
     
     const claims = tokens.claims();
