@@ -149,7 +149,39 @@ function PendingPaymentsContent() {
               className="bg-slate-800/50 border-yellow-500/30 hover:border-yellow-500/50 transition-colors"
             >
               <CardContent className="p-4">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                  {/* Slip Thumbnail */}
+                  {payment.slipImageUrl ? (
+                    <a
+                      href={payment.slipImageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-shrink-0 group"
+                    >
+                      <div className="relative w-16 h-20 bg-slate-700 rounded-lg overflow-hidden border-2 border-slate-600 group-hover:border-green-500 transition-colors">
+                        <img
+                          src={payment.slipImageUrl}
+                          alt="Payment slip"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                          }}
+                        />
+                        <div className="hidden absolute inset-0 flex items-center justify-center">
+                          <ImageIcon className="w-6 h-6 text-slate-500" />
+                        </div>
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <ExternalLink className="w-4 h-4 text-white" />
+                        </div>
+                      </div>
+                    </a>
+                  ) : (
+                    <div className="flex-shrink-0 w-16 h-20 bg-slate-700/50 rounded-lg border-2 border-dashed border-slate-600 flex items-center justify-center">
+                      <AlertTriangle className="w-6 h-6 text-orange-400" />
+                    </div>
+                  )}
+
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="font-mono text-sm text-slate-400">{payment.id}</span>
@@ -157,12 +189,7 @@ function PendingPaymentsContent() {
                         <Clock className="w-3 h-3" />
                         Pending
                       </Badge>
-                      {payment.slipImageUrl ? (
-                        <Badge variant="outline" className="border-green-500/30 text-green-400 gap-1">
-                          <ImageIcon className="w-3 h-3" />
-                          Has Slip
-                        </Badge>
-                      ) : (
+                      {!payment.slipImageUrl && (
                         <Badge variant="outline" className="border-orange-500/30 text-orange-400 gap-1">
                           <AlertTriangle className="w-3 h-3" />
                           No Slip
@@ -180,36 +207,30 @@ function PendingPaymentsContent() {
                       </div>
                     </div>
                     {payment.slipImageUrl && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <a
-                          href={payment.slipImageUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-green-400 hover:text-green-300 flex items-center gap-1"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                          View Payment Slip
-                        </a>
+                      <div className="flex items-center gap-3 text-sm">
                         {payment.slipAmount && (
-                          <span className="text-slate-400">
-                            • OCR Amount: {formatCurrency(payment.slipAmount)}
+                          <span className="text-green-400 font-medium">
+                            OCR: {formatCurrency(payment.slipAmount)}
                           </span>
                         )}
                         {payment.slipBank && (
-                          <span className="text-slate-400">• {payment.slipBank}</span>
+                          <span className="text-slate-400">{payment.slipBank}</span>
+                        )}
+                        {payment.slipDate && (
+                          <span className="text-slate-400">{payment.slipDate}</span>
                         )}
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
-                    <Link href={`/web-admin/contracts/${payment.contractId}`}>
+                    <Link href={`/web-admin/payments/${payment.id}`}>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                        className="border-blue-500/30 text-blue-400 hover:bg-blue-500/20"
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Contract
+                        Details
                       </Button>
                     </Link>
                     <Button

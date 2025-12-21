@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Loader2,
   Eye,
@@ -19,10 +20,17 @@ import {
   Plus,
   ExternalLink,
   Image as ImageIcon,
+  Calendar,
+  User,
+  Download,
 } from 'lucide-react';
-import type { Payment } from '@/types';
-import { format } from 'date-fns';
+import type { Payment, Contract } from '@/types';
+import { format, isWithinInterval, parseISO, startOfDay, endOfDay } from 'date-fns';
 import { th } from 'date-fns/locale';
+
+interface PaymentWithCustomer extends Payment {
+  customerName?: string;
+}
 
 type VerificationStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
 
@@ -46,24 +54,42 @@ function formatCurrency(amount: number): string {
 }
 
 function PaymentsContent() {
-  const [payments, setPayments] = useState<Payment[]>([]);
+  const [payments, setPayments] = useState<PaymentWithCustomer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch('/api/payments', {
-          headers: {
-            'x-line-userid': 'web-admin',
-          },
+        // Fetch both payments and contracts
+        const [paymentsRes, contractsRes] = await Promise.all([
+          fetch('/api/payments', { headers: { 'x-line-userid': 'web-admin' } }),
+          fetch('/api/contracts', { headers: { 'x-line-userid': 'web-admin' } }),
+        ]);
+        
+        const [paymentsData, contractsData] = await Promise.all([
+          paymentsRes.json(),
+          contractsRes.json(),
+        ]);
+        
+        // Create a map of contractId -> customerName
+        const contractMap = new Map<string, string>();
+        (contractsData.data || []).forEach((c: Contract) => {
+          contractMap.set(c.id, c.customerName);
         });
-        const data = await response.json();
+        
+        // Enrich payments with customer names
+        const enrichedPayments: PaymentWithCustomer[] = (paymentsData.data || []).map((p: Payment) => ({
+          ...p,
+          customerName: contractMap.get(p.contractId) || 'Unknown',
+        }));
+        
         // Sort by date descending
-        const sortedPayments = (data.data || []).sort(
-          (a: Payment, b: Payment) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        const sortedPayments = enrichedPayments.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         setPayments(sortedPayments);
       } catch (error) {
@@ -80,12 +106,26 @@ function PaymentsContent() {
     // Status filter
     if (filter !== 'all' && payment.verificationStatus !== filter) return false;
 
+    // Date range filter
+    if (dateFrom || dateTo) {
+      const paymentDate = parseISO(payment.paymentDate);
+      if (dateFrom) {
+        const fromDate = startOfDay(parseISO(dateFrom));
+        if (paymentDate < fromDate) return false;
+      }
+      if (dateTo) {
+        const toDate = endOfDay(parseISO(dateTo));
+        if (paymentDate > toDate) return false;
+      }
+    }
+
     // Search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       return (
         payment.id.toLowerCase().includes(term) ||
-        payment.contractId.toLowerCase().includes(term)
+        payment.contractId.toLowerCase().includes(term) ||
+        (payment.customerName?.toLowerCase().includes(term) ?? false)
       );
     }
 
@@ -93,6 +133,32 @@ function PaymentsContent() {
   });
 
   const pendingCount = payments.filter((p) => p.verificationStatus === 'PENDING').length;
+
+  const exportToCSV = () => {
+    if (filteredPayments.length === 0) return;
+
+    const headers = ['Payment ID', 'Contract ID', 'Customer Name', 'Amount', 'Payment Date', 'Method', 'Status', 'Slip Amount', 'Slip Bank'];
+    const rows = filteredPayments.map(p => [
+      p.id,
+      p.contractId,
+      p.customerName || '',
+      p.amount,
+      p.paymentDate,
+      p.paymentMethod,
+      p.verificationStatus,
+      p.slipAmount || '',
+      p.slipBank || '',
+    ]);
+
+    const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `payments-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   if (isLoading) {
     return (
@@ -109,7 +175,7 @@ function PaymentsContent() {
           <h1 className="text-2xl font-bold text-white">Payments</h1>
           <p className="text-slate-400 mt-1">{filteredPayments.length} payments found</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
@@ -119,6 +185,15 @@ function PaymentsContent() {
               className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
             />
           </div>
+          <Button
+            variant="outline"
+            onClick={exportToCSV}
+            disabled={filteredPayments.length === 0}
+            className="border-slate-600 text-slate-300 hover:bg-slate-700 shrink-0"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
           <Link href="/web-admin/payments/record">
             <Button className="bg-green-500 hover:bg-green-600 text-white">
               <Plus className="w-4 h-4 mr-2" />
@@ -128,32 +203,66 @@ function PaymentsContent() {
         </div>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
-        {[
-          { key: 'all', label: 'All' },
-          { key: 'PENDING', label: 'Pending' },
-          { key: 'VERIFIED', label: 'Verified' },
-          { key: 'REJECTED', label: 'Rejected' },
-        ].map(({ key, label }) => (
-          <Button
-            key={key}
-            size="sm"
-            variant={filter === key ? 'default' : 'outline'}
-            onClick={() => setFilter(key)}
-            className={
-              filter === key
-                ? 'bg-green-500 hover:bg-green-600 text-white'
-                : 'border-slate-600 text-slate-300 hover:bg-slate-700'
-            }
-          >
-            {label}
-            {key === 'PENDING' && pendingCount > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-yellow-500/30 text-yellow-300">
-                {pendingCount}
-              </span>
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex gap-2 flex-wrap">
+          {[
+            { key: 'all', label: 'All' },
+            { key: 'PENDING', label: 'Pending' },
+            { key: 'VERIFIED', label: 'Verified' },
+            { key: 'REJECTED', label: 'Rejected' },
+          ].map(({ key, label }) => (
+            <Button
+              key={key}
+              size="sm"
+              variant={filter === key ? 'default' : 'outline'}
+              onClick={() => setFilter(key)}
+              className={
+                filter === key
+                  ? 'bg-green-500 hover:bg-green-600 text-white'
+                  : 'border-slate-600 text-slate-300 hover:bg-slate-700'
+              }
+            >
+              {label}
+              {key === 'PENDING' && pendingCount > 0 && (
+                <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-yellow-500/30 text-yellow-300">
+                  {pendingCount}
+                </span>
+              )}
+            </Button>
+          ))}
+        </div>
+
+        {/* Date Range Filter */}
+        <div className="flex items-center gap-2 ml-auto">
+          <Calendar className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-2">
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="w-36 bg-slate-800 border-slate-700 text-white text-sm"
+              placeholder="From"
+            />
+            <span className="text-slate-500">-</span>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="w-36 bg-slate-800 border-slate-700 text-white text-sm"
+              placeholder="To"
+            />
+            {(dateFrom || dateTo) && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => { setDateFrom(''); setDateTo(''); }}
+                className="text-slate-400 hover:text-white text-xs"
+              >
+                Clear
+              </Button>
             )}
-          </Button>
-        ))}
+          </div>
+        </div>
       </div>
 
       {filteredPayments.length === 0 ? (
@@ -186,7 +295,15 @@ function PaymentsContent() {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-xl font-bold text-white">{formatCurrency(payment.amount)}</p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-xl font-bold text-white">{formatCurrency(payment.amount)}</p>
+                      {payment.customerName && (
+                        <span className="text-slate-300 flex items-center gap-1">
+                          <User className="w-3 h-3" />
+                          {payment.customerName}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex items-center gap-4 text-sm text-slate-400 flex-wrap">
                       <span>Contract: {payment.contractId}</span>
                       <span>{payment.paymentMethod}</span>

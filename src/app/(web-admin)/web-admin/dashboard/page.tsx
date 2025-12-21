@@ -19,7 +19,9 @@ import {
   Eye,
   Phone,
   ArrowRight,
+  Percent,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import type { Contract, Application, Payment } from '@/types';
 
 interface DashboardData {
@@ -46,6 +48,7 @@ function formatCurrency(amount: number): string {
 }
 
 function DashboardContent() {
+  const router = useRouter();
   const [data, setData] = useState<DashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -113,6 +116,20 @@ function DashboardContent() {
   const totalCollected = contracts.reduce((sum, c) => sum + c.totalPaid, 0);
   const overdueContracts = contracts.filter((c) => c.daysOverdue > 0);
   const pendingPayments = payments.length;
+
+  // Calculate Collection Rate (Total Collected / Total Due)
+  const totalDue = contracts.reduce((sum, c) => sum + c.totalDue, 0);
+  const collectionRate = totalDue > 0 ? Math.round((totalCollected / totalDue) * 100) : 0;
+
+  // Calculate On-time Payment Rate (contracts with no overdue / active contracts)
+  const onTimeContracts = contracts.filter((c) => c.status === 'ACTIVE' && c.daysOverdue === 0).length;
+  const onTimeRate = activeContracts > 0 ? Math.round((onTimeContracts / activeContracts) * 100) : 100;
+
+  // Overdue by severity
+  const overdue1to7 = contracts.filter((c) => c.daysOverdue >= 1 && c.daysOverdue <= 7).length;
+  const overdue8to30 = contracts.filter((c) => c.daysOverdue >= 8 && c.daysOverdue <= 30).length;
+  const overdue31to60 = contracts.filter((c) => c.daysOverdue >= 31 && c.daysOverdue <= 60).length;
+  const overdue60plus = contracts.filter((c) => c.daysOverdue > 60).length;
 
   // Calculate aging report data
   const agingData: AgingData[] = [
@@ -208,6 +225,18 @@ function DashboardContent() {
     { label: 'Pending Payments', value: pendingPayments, color: 'text-orange-400' },
   ];
 
+  const rateStats = [
+    { label: 'Collection Rate', value: `${collectionRate}%`, color: collectionRate >= 80 ? 'text-green-400' : collectionRate >= 50 ? 'text-yellow-400' : 'text-red-400' },
+    { label: 'On-Time Payment Rate', value: `${onTimeRate}%`, color: onTimeRate >= 80 ? 'text-green-400' : onTimeRate >= 50 ? 'text-yellow-400' : 'text-red-400' },
+  ];
+
+  const overdueBySeverity = [
+    { label: '1-7 days', count: overdue1to7, color: 'text-yellow-400', bgColor: 'bg-yellow-500/20', filter: '1-7' },
+    { label: '8-30 days', count: overdue8to30, color: 'text-orange-400', bgColor: 'bg-orange-500/20', filter: '8-30' },
+    { label: '31-60 days', count: overdue31to60, color: 'text-red-400', bgColor: 'bg-red-500/20', filter: '31-60' },
+    { label: '60+ days', count: overdue60plus, color: 'text-red-500', bgColor: 'bg-red-600/20', filter: '60+' },
+  ];
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -233,14 +262,49 @@ function DashboardContent() {
       </div>
 
       {/* Quick Stats Row */}
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
         {quickStats.map((stat, index) => (
           <div key={index} className="bg-slate-800/30 rounded-lg p-4 border border-slate-700/50">
             <p className="text-slate-400 text-sm">{stat.label}</p>
             <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>
           </div>
         ))}
+        {rateStats.map((stat, index) => (
+          <div key={`rate-${index}`} className="bg-slate-800/30 rounded-lg p-4 border border-slate-700/50">
+            <p className="text-slate-400 text-sm flex items-center gap-1">
+              <Percent className="w-3 h-3" />
+              {stat.label}
+            </p>
+            <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>
+          </div>
+        ))}
       </div>
+
+      {/* Overdue by Severity */}
+      {overdueContracts.length > 0 && (
+        <Card className="bg-slate-800/50 border-slate-700">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-base flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-400" />
+              Overdue by Severity
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
+              {overdueBySeverity.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => router.push(`/web-admin/contracts?overdueFilter=${item.filter}`)}
+                  className={`${item.bgColor} rounded-lg p-4 border border-slate-700/50 hover:border-slate-500 transition-colors text-left`}
+                >
+                  <p className="text-slate-400 text-sm">{item.label}</p>
+                  <p className={`text-2xl font-bold ${item.color}`}>{item.count}</p>
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Aging Report */}
@@ -258,22 +322,39 @@ function DashboardContent() {
             </Link>
           </CardHeader>
           <CardContent className="space-y-4">
-            {agingData.map((item) => (
-              <div key={item.category} className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className={item.color}>{item.category}</span>
-                  <span className="text-slate-400">
-                    {item.count} contracts • {formatCurrency(item.amount)}
-                  </span>
-                </div>
-                <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${item.bgColor} rounded-full transition-all duration-500`}
-                    style={{ width: `${(item.amount / maxAgingAmount) * 100}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+            {agingData.map((item) => {
+              // Determine the filter to apply when clicked
+              const filterMap: Record<string, string> = {
+                'Current': 'current',
+                '1-7 Days': '1-7',
+                '8-30 Days': '8-30',
+                '31-60 Days': '31-60',
+                '60+ Days': '60+',
+              };
+              const filterValue = filterMap[item.category] || 'all';
+              
+              return (
+                <button
+                  key={item.category}
+                  onClick={() => router.push(`/web-admin/contracts?overdueFilter=${filterValue}`)}
+                  className="w-full space-y-2 text-left hover:opacity-80 transition-opacity"
+                  disabled={item.count === 0}
+                >
+                  <div className="flex items-center justify-between text-sm">
+                    <span className={item.color}>{item.category}</span>
+                    <span className="text-slate-400">
+                      {item.count} contracts • {formatCurrency(item.amount)}
+                    </span>
+                  </div>
+                  <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${item.bgColor} rounded-full transition-all duration-500`}
+                      style={{ width: `${(item.amount / maxAgingAmount) * 100}%` }}
+                    />
+                  </div>
+                </button>
+              );
+            })}
             {agingData.every((d) => d.count === 0) && (
               <div className="text-center py-8 text-slate-400">
                 <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-400 opacity-50" />

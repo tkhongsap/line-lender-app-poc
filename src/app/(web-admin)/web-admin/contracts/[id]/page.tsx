@@ -33,6 +33,7 @@ import {
   ExternalLink,
   Send,
   Bell,
+  FolderOpen,
 } from 'lucide-react';
 import type { Contract, PaymentSchedule, Payment, ContractStatus, PaymentStatus } from '@/types';
 import { format } from 'date-fns';
@@ -201,8 +202,14 @@ function ContractDetailContent() {
             <div>
               <p className="text-xl font-semibold text-white">{contract.customerName}</p>
               <p className="text-slate-400">{contract.customerPhone}</p>
+              {contract.lineUserId && (
+                <p className="text-slate-400 text-sm flex items-center gap-1 mt-1">
+                  <MessageCircle className="w-3 h-3" />
+                  LINE: <span className="font-mono text-xs">{contract.lineUserId}</span>
+                </p>
+              )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 size="sm"
                 variant="outline"
@@ -221,6 +228,21 @@ function ContractDetailContent() {
                 <Bell className="w-4 h-4 mr-2" />
                 Send Reminder
               </Button>
+              {contract.applicationId && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-blue-500/30 text-blue-400 hover:bg-blue-500/20"
+                  onClick={() => {
+                    // Link to Google Drive folder for this application's documents
+                    const driveBaseUrl = process.env.NEXT_PUBLIC_GOOGLE_DRIVE_FOLDER_URL || 'https://drive.google.com/drive/folders';
+                    window.open(`${driveBaseUrl}?q=${contract.applicationId}`, '_blank');
+                  }}
+                >
+                  <FolderOpen className="w-4 h-4 mr-2" />
+                  Documents
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>

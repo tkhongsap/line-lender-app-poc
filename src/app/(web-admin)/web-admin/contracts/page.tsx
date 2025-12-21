@@ -8,7 +8,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Loader2, Eye, FileText, Search, AlertCircle } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Loader2, Eye, FileText, Search, AlertCircle, ArrowUpDown, Download } from 'lucide-react';
+import { format } from 'date-fns';
 import type { Contract, ContractStatus } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 import { th } from 'date-fns/locale';
@@ -39,10 +47,14 @@ function getOverdueBadge(daysOverdue: number): { color: string; label: string } 
   return { color: 'bg-red-500/20 text-red-400 border-red-500/30', label: `${daysOverdue}d overdue` };
 }
 
+type SortOption = 'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc' | 'overdue-desc';
+
 function ContractsContent() {
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [overdueFilter, setOverdueFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<SortOption>('date-desc');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -67,8 +79,16 @@ function ContractsContent() {
 
   const filteredContracts = contracts.filter((contract) => {
     // Status filter
-    if (filter === 'overdue' && contract.daysOverdue === 0) return false;
-    if (filter !== 'all' && filter !== 'overdue' && contract.status !== filter) return false;
+    if (statusFilter !== 'all' && contract.status !== statusFilter) return false;
+    
+    // Overdue bucket filter
+    if (overdueFilter !== 'all') {
+      if (overdueFilter === 'current' && contract.daysOverdue !== 0) return false;
+      if (overdueFilter === '1-7' && (contract.daysOverdue < 1 || contract.daysOverdue > 7)) return false;
+      if (overdueFilter === '8-30' && (contract.daysOverdue < 8 || contract.daysOverdue > 30)) return false;
+      if (overdueFilter === '31-60' && (contract.daysOverdue < 31 || contract.daysOverdue > 60)) return false;
+      if (overdueFilter === '60+' && contract.daysOverdue <= 60) return false;
+    }
     
     // Search filter
     if (searchTerm) {
@@ -83,10 +103,51 @@ function ContractsContent() {
     return true;
   });
 
-  // Sort by overdue days (most overdue first) for overdue filter
-  const sortedContracts = filter === 'overdue' 
-    ? [...filteredContracts].sort((a, b) => b.daysOverdue - a.daysOverdue)
-    : filteredContracts;
+  // Sort contracts based on selected sort option
+  const sortedContracts = [...filteredContracts].sort((a, b) => {
+    switch (sortBy) {
+      case 'date-desc':
+        return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+      case 'date-asc':
+        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      case 'amount-desc':
+        return b.approvedAmount - a.approvedAmount;
+      case 'amount-asc':
+        return a.approvedAmount - b.approvedAmount;
+      case 'overdue-desc':
+        return b.daysOverdue - a.daysOverdue;
+      default:
+        return 0;
+    }
+  });
+
+  const exportToCSV = () => {
+    if (sortedContracts.length === 0) return;
+
+    const headers = ['Contract ID', 'Customer Name', 'Phone', 'Amount', 'Interest Rate', 'Term', 'Start Date', 'End Date', 'Outstanding', 'Days Overdue', 'Status'];
+    const rows = sortedContracts.map(c => [
+      c.id,
+      c.customerName,
+      c.customerPhone,
+      c.approvedAmount,
+      `${c.interestRate}%`,
+      `${c.termMonths} months`,
+      c.startDate,
+      c.endDate,
+      c.outstandingBalance,
+      c.daysOverdue,
+      c.status,
+    ]);
+
+    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `contracts-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   if (isLoading) {
     return (
@@ -105,44 +166,109 @@ function ContractsContent() {
             {sortedContracts.length} contracts found
           </p>
         </div>
-        <div className="relative w-full sm:w-64">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <Input
-            placeholder="Search by name, ID, or phone..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-          />
+        <div className="flex items-center gap-3">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              placeholder="Search by name, ID, or phone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+            />
+          </div>
+          <Button
+            variant="outline"
+            onClick={exportToCSV}
+            disabled={sortedContracts.length === 0}
+            className="border-slate-600 text-slate-300 hover:bg-slate-700 shrink-0"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
         </div>
       </div>
 
+      {/* Status Filters */}
       <div className="flex gap-2 flex-wrap">
         {[
           { key: 'all', label: 'All' },
           { key: 'ACTIVE', label: 'Active' },
-          { key: 'overdue', label: 'Overdue' },
           { key: 'COMPLETED', label: 'Completed' },
           { key: 'DEFAULT', label: 'Default' },
         ].map(({ key, label }) => (
           <Button
             key={key}
             size="sm"
-            variant={filter === key ? 'default' : 'outline'}
-            onClick={() => setFilter(key)}
+            variant={statusFilter === key ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(key)}
             className={
-              filter === key
+              statusFilter === key
                 ? 'bg-green-500 hover:bg-green-600 text-white'
                 : 'border-slate-600 text-slate-300 hover:bg-slate-700'
             }
           >
             {label}
-            {key === 'overdue' && contracts.filter(c => c.daysOverdue > 0).length > 0 && (
-              <span className="ml-1.5 px-1.5 py-0.5 text-xs rounded-full bg-red-500/30 text-red-300">
-                {contracts.filter(c => c.daysOverdue > 0).length}
-              </span>
-            )}
           </Button>
         ))}
+      </div>
+
+      {/* Overdue Bucket Filters & Sort */}
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="flex gap-2 flex-wrap">
+          <span className="text-slate-400 text-sm flex items-center">Overdue:</span>
+          {[
+            { key: 'all', label: 'All', count: contracts.length },
+            { key: 'current', label: 'Current', color: 'green' },
+            { key: '1-7', label: '1-7d', color: 'yellow' },
+            { key: '8-30', label: '8-30d', color: 'orange' },
+            { key: '31-60', label: '31-60d', color: 'red' },
+            { key: '60+', label: '60+d', color: 'red' },
+          ].map(({ key, label, color }) => {
+            let count = 0;
+            if (key === 'all') count = contracts.length;
+            else if (key === 'current') count = contracts.filter(c => c.daysOverdue === 0).length;
+            else if (key === '1-7') count = contracts.filter(c => c.daysOverdue >= 1 && c.daysOverdue <= 7).length;
+            else if (key === '8-30') count = contracts.filter(c => c.daysOverdue >= 8 && c.daysOverdue <= 30).length;
+            else if (key === '31-60') count = contracts.filter(c => c.daysOverdue >= 31 && c.daysOverdue <= 60).length;
+            else if (key === '60+') count = contracts.filter(c => c.daysOverdue > 60).length;
+
+            return (
+              <Button
+                key={key}
+                size="sm"
+                variant={overdueFilter === key ? 'default' : 'outline'}
+                onClick={() => setOverdueFilter(key)}
+                className={
+                  overdueFilter === key
+                    ? `bg-${color || 'green'}-500 hover:bg-${color || 'green'}-600 text-white`
+                    : 'border-slate-600 text-slate-300 hover:bg-slate-700'
+                }
+              >
+                {label}
+                {count > 0 && key !== 'all' && (
+                  <span className="ml-1 text-xs opacity-70">({count})</span>
+                )}
+              </Button>
+            );
+          })}
+        </div>
+
+        {/* Sort Dropdown */}
+        <div className="flex items-center gap-2 ml-auto">
+          <ArrowUpDown className="w-4 h-4 text-slate-400" />
+          <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+            <SelectTrigger className="w-44 bg-slate-800 border-slate-700 text-white">
+              <SelectValue placeholder="Sort by..." />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-800 border-slate-700">
+              <SelectItem value="date-desc" className="text-white">Date (Newest)</SelectItem>
+              <SelectItem value="date-asc" className="text-white">Date (Oldest)</SelectItem>
+              <SelectItem value="amount-desc" className="text-white">Amount (High-Low)</SelectItem>
+              <SelectItem value="amount-asc" className="text-white">Amount (Low-High)</SelectItem>
+              <SelectItem value="overdue-desc" className="text-white">Days Overdue</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {sortedContracts.length === 0 ? (

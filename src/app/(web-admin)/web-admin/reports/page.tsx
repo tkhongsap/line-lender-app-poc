@@ -108,6 +108,14 @@ interface MonthlyReportData {
 
 type ReportData = DailyReportData | MonthlyReportData;
 
+interface ReportHistoryItem {
+  id: string;
+  type: 'daily' | 'monthly';
+  date: string;
+  generatedAt: string;
+  report: ReportData;
+}
+
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('th-TH', {
     style: 'currency',
@@ -121,9 +129,12 @@ function ReportsContent() {
   const [reportType, setReportType] = useState<'daily' | 'monthly'>('daily');
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'yyyy-MM'));
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [report, setReport] = useState<ReportData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reportHistory, setReportHistory] = useState<ReportHistoryItem[]>([]);
 
   const generateReport = async () => {
     setIsLoading(true);
@@ -137,12 +148,24 @@ function ReportsContent() {
         body: JSON.stringify({
           type: reportType,
           date: reportType === 'daily' ? selectedDate : selectedMonth,
+          dateFrom: dateFrom || undefined,
+          dateTo: dateTo || undefined,
         }),
       });
 
       const data = await response.json();
       if (data.success) {
         setReport(data.data);
+        
+        // Add to history
+        const historyItem: ReportHistoryItem = {
+          id: `${Date.now()}`,
+          type: reportType,
+          date: reportType === 'daily' ? selectedDate : selectedMonth,
+          generatedAt: new Date().toISOString(),
+          report: data.data,
+        };
+        setReportHistory(prev => [historyItem, ...prev.slice(0, 9)]);
       } else {
         setError(data.error || 'Failed to generate report');
       }
@@ -151,6 +174,16 @@ function ReportsContent() {
       setError('Failed to generate report');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadFromHistory = (item: ReportHistoryItem) => {
+    setReport(item.report);
+    setReportType(item.type);
+    if (item.type === 'daily') {
+      setSelectedDate(item.date);
+    } else {
+      setSelectedMonth(item.date);
     }
   };
 
@@ -258,6 +291,42 @@ function ReportsContent() {
                 />
               )}
             </div>
+
+            {/* Date Range Filter (Optional) */}
+            <div className="flex items-center gap-2 border-l border-slate-700 pl-4">
+              <div className="space-y-2">
+                <Label className="text-slate-400 text-xs">Date Range (Optional)</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="bg-slate-700 border-slate-600 text-white w-36 text-sm"
+                    placeholder="From"
+                  />
+                  <span className="text-slate-500">-</span>
+                  <Input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    max={format(new Date(), 'yyyy-MM-dd')}
+                    className="bg-slate-700 border-slate-600 text-white w-36 text-sm"
+                    placeholder="To"
+                  />
+                  {(dateFrom || dateTo) && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => { setDateFrom(''); setDateTo(''); }}
+                      className="text-slate-400 hover:text-white text-xs px-2"
+                    >
+                      Clear
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <Button
               onClick={generateReport}
               disabled={isLoading}
@@ -286,7 +355,7 @@ function ReportsContent() {
           {reportType === 'daily' && (
             <div className="flex gap-2 flex-wrap">
               <span className="text-slate-400 text-sm">Quick select:</span>
-              {[0, 1, 7].map((daysAgo) => (
+              {[0, 1, 7, 30].map((daysAgo) => (
                 <Button
                   key={daysAgo}
                   variant="ghost"
@@ -308,6 +377,44 @@ function ReportsContent() {
           <CardContent className="py-4 flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-red-400" />
             <p className="text-red-400">{error}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Report History */}
+      {reportHistory.length > 0 && (
+        <Card className="bg-slate-800/50 border-slate-700">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base text-white flex items-center gap-2">
+              <Clock className="w-4 h-4 text-slate-400" />
+              Recent Reports
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-2 flex-wrap">
+              {reportHistory.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => loadFromHistory(item)}
+                  className="px-3 py-2 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-green-500/50 hover:bg-slate-700 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      className={item.type === 'daily' 
+                        ? 'bg-blue-500/20 text-blue-400 text-xs' 
+                        : 'bg-purple-500/20 text-purple-400 text-xs'
+                      }
+                    >
+                      {item.type === 'daily' ? 'Daily' : 'Monthly'}
+                    </Badge>
+                    <span className="text-white text-sm">{item.date}</span>
+                  </div>
+                  <p className="text-slate-500 text-xs mt-1">
+                    {format(new Date(item.generatedAt), 'HH:mm')}
+                  </p>
+                </button>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}
