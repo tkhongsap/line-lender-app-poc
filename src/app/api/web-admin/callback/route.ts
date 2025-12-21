@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as client from 'openid-client';
-import { createSession, upsertWebAdminUser, getWebAdminUserByEmail, SESSION_COOKIE_NAME } from '@/lib/web-auth';
+import { createSession, upsertWebAdminUser, getWebAdminUserByEmail, createWebAdminUser, SESSION_COOKIE_NAME } from '@/lib/web-auth';
 import type { UserRole } from '@/types';
 
 const ISSUER_URL = process.env.ISSUER_URL ?? 'https://replit.com/oidc';
@@ -44,7 +44,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_email`);
     }
     
-    const dbUser = await getWebAdminUserByEmail(claims.email as string);
+    let dbUser = await getWebAdminUserByEmail(claims.email as string);
+    
+    const allowTestAccess = process.env.WEB_ADMIN_TEST_MODE === 'true';
+    
+    if (!dbUser && allowTestAccess) {
+      dbUser = await createWebAdminUser({
+        id: claims.sub as string,
+        email: claims.email as string,
+        firstName: claims.first_name as string | undefined,
+        lastName: claims.last_name as string | undefined,
+        profileImageUrl: claims.profile_image_url as string | undefined,
+        role: 'APPROVER',
+        active: 'true',
+      });
+    }
     
     if (!dbUser || dbUser.active !== 'true') {
       return NextResponse.redirect(`${baseUrl}/web-admin/login?error=not_authorized`);

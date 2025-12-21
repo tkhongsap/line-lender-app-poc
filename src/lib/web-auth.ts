@@ -139,6 +139,30 @@ export async function getWebAdminUserByEmail(email: string) {
   return user || null;
 }
 
+export async function createWebAdminUser(userData: {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  profileImageUrl?: string;
+  role?: string;
+  active?: string;
+}) {
+  const [inserted] = await db
+    .insert(webAdminUsers)
+    .values({
+      id: userData.id,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      profileImageUrl: userData.profileImageUrl,
+      role: userData.role || 'VIEWER',
+      active: userData.active || 'true',
+    })
+    .returning();
+  return inserted;
+}
+
 export function getLoginUrl(hostname: string): string {
   return `/api/web-admin/login?redirect=${encodeURIComponent('https://' + hostname + '/web-admin/dashboard')}`;
 }

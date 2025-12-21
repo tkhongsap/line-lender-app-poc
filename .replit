@@ -45,3 +45,4 @@ build = ["npm", "run", "build"]
 NEXT_PUBLIC_BASE_URL = "https://line-lender-app-poc--tkhongsap.replit.app"
 NEXT_PUBLIC_LIFF_ID_CUSTOMER = "2008736154-4zHi92dC"
 NEXT_PUBLIC_LIFF_ID_ADMIN = ""
+WEB_ADMIN_TEST_MODE = "true"
