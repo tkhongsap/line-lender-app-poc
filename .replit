@@ -1,6 +1,7 @@
 modules = ["nodejs-20", "web"]
 [agent]
 expertMode = true
+integrations = ["javascript_log_in_with_replit:2.0.0"]
 
 [nix]
 channel = "stable-25_05"
@@ -21,13 +22,13 @@ args = "Next.js Dev Server"
 name = "Next.js Dev Server"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev -- -p 5000 -H 0.0.0.0"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
@@ -44,3 +45,4 @@ build = ["npm", "run", "build"]
 NEXT_PUBLIC_BASE_URL = "https://line-lender-app-poc--tkhongsap.replit.app"
 NEXT_PUBLIC_LIFF_ID_CUSTOMER = "2008736154-4zHi92dC"
 NEXT_PUBLIC_LIFF_ID_ADMIN = ""
+WEB_ADMIN_TEST_MODE = "true"

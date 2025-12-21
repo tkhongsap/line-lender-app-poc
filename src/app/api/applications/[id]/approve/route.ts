@@ -13,7 +13,8 @@ import {
   getSetting,
 } from '@/lib/google-sheets';
 import { notifyApplicationApproved } from '@/lib/line';
-import { createAuthContext, requirePermission } from '@/lib/auth';
+import { createAuthContext, requirePermission, AuthContext } from '@/lib/auth';
+import { getWebAdminAuthContext } from '@/lib/web-auth';
 import {
   generatePaymentSchedule,
   calculateMonthlyPayment,
@@ -56,10 +57,34 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Get auth context
     const lineUserId = request.headers.get('x-line-userid');
-    const authContext = await createAuthContext(lineUserId);
-    requirePermission(authContext, 'approve_applications');
+    let authContext: AuthContext = await createAuthContext(lineUserId);
+    
+    if (!authContext.isAuthenticated || lineUserId === 'web-admin') {
+      const webAdminContext = await getWebAdminAuthContext();
+      if (webAdminContext.isAuthenticated && webAdminContext.isAdmin) {
+        const hasApprovePermission = ['SUPER_ADMIN', 'APPROVER'].includes(webAdminContext.user?.role || '');
+        if (!hasApprovePermission) {
+          return NextResponse.json(
+            { success: false, error: 'Permission denied' },
+            { status: 403 }
+          );
+        }
+        authContext = {
+          user: null,
+          isAuthenticated: true,
+          isAdmin: true,
+          permissions: ['approve_applications'],
+        };
+      } else {
+        return NextResponse.json(
+          { success: false, error: 'Unauthorized' },
+          { status: 401 }
+        );
+      }
+    } else {
+      requirePermission(authContext, 'approve_applications');
+    }
 
     // Get application
     const application = await getApplicationById(id);

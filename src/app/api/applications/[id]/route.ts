@@ -9,7 +9,8 @@ import {
   getApplicationById,
   updateApplication,
 } from '@/lib/google-sheets';
-import { createAuthContext, requireAuth, requireOwnResource, requireAdmin } from '@/lib/auth';
+import { createAuthContext, requireAuth, requireOwnResource, requireAdmin, AuthContext } from '@/lib/auth';
+import { getWebAdminAuthContext } from '@/lib/web-auth';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -23,9 +24,20 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     
-    // Get auth context
     const lineUserId = request.headers.get('x-line-userid');
-    const authContext = await createAuthContext(lineUserId);
+    let authContext = await createAuthContext(lineUserId);
+    
+    if (!authContext.isAuthenticated || lineUserId === 'web-admin') {
+      const webAdminContext = await getWebAdminAuthContext();
+      if (webAdminContext.isAuthenticated) {
+        authContext = {
+          user: null,
+          isAuthenticated: true,
+          isAdmin: webAdminContext.isAdmin,
+          permissions: [],
+        };
+      }
+    }
 
     const application = await getApplicationById(id);
 
@@ -36,8 +48,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check access permissions
-    if (!authContext.isAdmin) {
+    if (!authContext.isAdmin && authContext.user) {
       requireOwnResource(authContext, application.lineUserId);
     }
 

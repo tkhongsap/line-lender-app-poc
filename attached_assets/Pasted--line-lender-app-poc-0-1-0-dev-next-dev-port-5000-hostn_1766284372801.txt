@@ -1,0 +1,41 @@
+
+> line-lender-app-poc@0.1.0 dev
+> next dev --port 5000 --hostname 0.0.0.0
+
+▲ Next.js 16.1.0 (Turbopack)
+- Local:         http://localhost:5000
+- Network:       http://0.0.0.0:5000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 850ms
+○ Compiling / ...
+ GET / 200 in 4.8s (compile: 4.3s, render: 474ms)
+ GET /web-admin/login 200 in 196ms (compile: 111ms, render: 85ms)
+⚠ Blocked cross-origin request from 127.0.0.1 to /_next/* resource. To allow this, configure "allowedDevOrigins" in next.config
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /web-admin/login 200 in 38ms (compile: 6ms, render: 32ms)
+ GET /api/web-admin/login 307 in 503ms (compile: 112ms, render: 391ms)
+ GET /api/web-admin/login 200 in 208ms (compile: 4ms, render: 205ms)
+ GET /api/web-admin/login 307 in 249ms (compile: 3ms, render: 246ms)
+ GET /api/web-admin/login 307 in 232ms (compile: 3ms, render: 230ms)
+Callback error: Error [ResponseBodyError]: server responded with an error in the response body
+    at async GET (src/app/api/web-admin/callback/route.ts:43:20)
+  41 |     );
+  42 |     
+> 43 |     const tokens = await client.authorizationCodeGrant(config, new URL(request.url), {
+     |                    ^
+  44 |       expectedState: state || undefined,
+  45 |       pkceCodeVerifier: codeVerifier,
+  46 |       idTokenExpected: true, {
+  code: 'OAUTH_RESPONSE_BODY_ERROR',
+  error: 'invalid_grant',
+  status: 400,
+  error_description: 'grant request is invalid',
+  [cause]: [Object]
+}
+ GET /api/web-admin/callback?code=JCKzZguVQ0vP8TF64vlMKyCnH7XdkYHepqGF9hJtfVi&state=eyJyZWRpcmVjdCI6Ii93ZWItYWRtaW4vZGFzaGJvYXJkIn0&iss=https%3A%2F%2Freplit.com%2Foidc 307 in 932ms (compile: 101ms, render: 831ms)
+ GET /web-admin/login?error=auth_failed 200 in 52ms (compile: 4ms, render: 48ms)
+ GET /web-admin/login?error=auth_failed 200 in 62ms (compile: 7ms, render: 55ms)
+ GET /api/web-admin/login 307 in 282ms (compile: 4ms, render: 278ms)
+ GET /web-admin/login?error=auth_failed 200 in 51ms (compile: 7ms, render: 45ms)
