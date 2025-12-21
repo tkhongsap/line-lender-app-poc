@@ -4,6 +4,7 @@ import { createSession, upsertWebAdminUser, getWebAdminUserByEmail, createWebAdm
 import type { UserRole } from '@/types';
 
 const ISSUER_URL = process.env.ISSUER_URL ?? 'https://replit.com/oidc';
+const CODE_VERIFIER_COOKIE = 'pkce_code_verifier';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -16,6 +17,11 @@ export async function GET(request: NextRequest) {
   
   if (!code) {
     return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_code`);
+  }
+  
+  const codeVerifier = request.cookies.get(CODE_VERIFIER_COOKIE)?.value;
+  if (!codeVerifier) {
+    return NextResponse.redirect(`${baseUrl}/web-admin/login?error=no_verifier`);
   }
   
   let redirectTo = '/web-admin/dashboard';
@@ -36,6 +42,7 @@ export async function GET(request: NextRequest) {
     
     const tokens = await client.authorizationCodeGrant(config, new URL(request.url), {
       expectedState: state || undefined,
+      pkceCodeVerifier: codeVerifier,
     });
     
     const claims = tokens.claims();
@@ -92,6 +99,8 @@ export async function GET(request: NextRequest) {
       maxAge: 7 * 24 * 60 * 60,
       path: '/',
     });
+    
+    response.cookies.delete(CODE_VERIFIER_COOKIE);
     
     return response;
   } catch (error) {
