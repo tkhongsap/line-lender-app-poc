@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const state = searchParams.get('state');
+  const iss = searchParams.get('iss');
   
   const host = request.headers.get('host') || request.headers.get('x-forwarded-host') || '';
   const protocol = request.headers.get('x-forwarded-proto') || 'https';
@@ -48,6 +49,7 @@ export async function GET(request: NextRequest) {
     const callbackUrl = new URL(redirectUri);
     callbackUrl.searchParams.set('code', code);
     if (state) callbackUrl.searchParams.set('state', state);
+    if (iss) callbackUrl.searchParams.set('iss', iss);
     
     console.log('Token exchange details:', {
       baseUrl,
