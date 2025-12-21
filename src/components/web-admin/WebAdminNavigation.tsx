@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 import { useWebAuth } from '@/hooks/use-web-auth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -31,6 +30,7 @@ import {
   AlertTriangle,
   BarChart3,
 } from 'lucide-react';
+import { LocaleSwitcherMinimal } from '@/components/LocaleSwitcher';
 
 interface WebAdminNavigationProps {
   children: React.ReactNode;
@@ -124,17 +124,17 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <header className="sticky top-0 z-50 w-full border-b border-slate-700 bg-slate-900/95 backdrop-blur supports-[backdrop-filter]:bg-slate-900/60">
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <Link href="/web-admin/dashboard" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                 <CreditCard className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg text-white hidden sm:inline">LINE Lender</span>
+              <span className="font-bold text-lg text-foreground hidden sm:inline">LINE Lender</span>
             </Link>
-            <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-500/20 text-green-400">
+            <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
               Staff Portal
             </span>
           </div>
@@ -148,8 +148,8 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                   size="sm"
                   className={`gap-2 ${
                     isActive(item.href)
-                      ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                      ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
@@ -164,28 +164,28 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="gap-1 text-slate-300 hover:text-white hover:bg-slate-800"
+                  className="gap-1 text-muted-foreground hover:text-foreground hover:bg-muted"
                 >
                   More
                   <ChevronDown className="w-3 h-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-popover border">
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel className="text-slate-400 text-xs">Quick Links</DropdownMenuLabel>
-                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                  <DropdownMenuLabel className="text-muted-foreground text-xs">Quick Links</DropdownMenuLabel>
+                  <DropdownMenuItem asChild className="text-foreground focus:bg-muted cursor-pointer">
                     <Link href="/web-admin/applications/pending">
                       <Clock className="w-4 h-4 mr-2" />
                       Pending Applications
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                  <DropdownMenuItem asChild className="text-foreground focus:bg-muted cursor-pointer">
                     <Link href="/web-admin/contracts/overdue">
                       <AlertTriangle className="w-4 h-4 mr-2" />
                       Overdue Contracts
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                  <DropdownMenuItem asChild className="text-foreground focus:bg-muted cursor-pointer">
                     <Link href="/web-admin/payments/pending">
                       <DollarSign className="w-4 h-4 mr-2" />
                       Pending Payments
@@ -194,16 +194,16 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                 </DropdownMenuGroup>
                 {isSuperAdmin && (
                   <>
-                    <DropdownMenuSeparator className="bg-slate-700" />
+                    <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuLabel className="text-slate-400 text-xs">Admin</DropdownMenuLabel>
-                      <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                      <DropdownMenuLabel className="text-muted-foreground text-xs">Admin</DropdownMenuLabel>
+                      <DropdownMenuItem asChild className="text-foreground focus:bg-muted cursor-pointer">
                         <Link href="/web-admin/staff">
                           <Users className="w-4 h-4 mr-2" />
                           Staff Management
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="text-slate-300 focus:bg-slate-700 focus:text-white cursor-pointer">
+                      <DropdownMenuItem asChild className="text-foreground focus:bg-muted cursor-pointer">
                         <Link href="/web-admin/settings">
                           <Settings className="w-4 h-4 mr-2" />
                           Settings
@@ -217,13 +217,16 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Language Switcher */}
+            <LocaleSwitcherMinimal />
+
             {/* User Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 text-slate-300 hover:text-white">
+                <Button variant="ghost" className="flex items-center gap-2 text-muted-foreground hover:text-foreground">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.profileImageUrl} />
-                    <AvatarFallback className="bg-green-500/20 text-green-400 text-sm">
+                    <AvatarFallback className="bg-primary/10 text-primary text-sm">
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
@@ -231,20 +234,20 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-slate-800 border-slate-700">
-                <DropdownMenuLabel className="text-slate-300">
+              <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] sm:w-56 max-w-56 bg-popover border">
+                <DropdownMenuLabel className="text-foreground">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium truncate">
                       {user?.firstName} {user?.lastName}
                     </p>
-                    <p className="text-xs text-slate-400">{user?.email}</p>
-                    <p className="text-xs text-green-400">{user?.role}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    <p className="text-xs text-primary">{user?.role}</p>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-slate-700" />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={logout}
-                  className="text-red-400 focus:text-red-300 focus:bg-red-500/10 cursor-pointer"
+                  className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   Sign out
@@ -256,7 +259,7 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-slate-300"
+              className="md:hidden text-muted-foreground"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -266,7 +269,7 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-700 bg-slate-900 p-4 max-h-[80vh] overflow-y-auto">
+          <div className="md:hidden border-t border-border bg-background p-4 max-h-[80vh] overflow-y-auto">
             <nav className="flex flex-col gap-4">
               {navGroups.map((group) => {
                 const visibleItems = group.items.filter(
@@ -276,7 +279,7 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
 
                 return (
                   <div key={group.label}>
-                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">
+                    <p className="text-xs font-medium text-tertiary uppercase tracking-wider mb-2">
                       {group.label}
                     </p>
                     <div className="flex flex-col gap-1">
@@ -290,8 +293,8 @@ export function WebAdminNavigation({ children }: WebAdminNavigationProps) {
                             variant="ghost"
                             className={`w-full justify-start gap-3 ${
                               isActive(item.href)
-                                ? 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
-                                : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                                ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                             }`}
                           >
                             <item.icon className="w-5 h-5" />

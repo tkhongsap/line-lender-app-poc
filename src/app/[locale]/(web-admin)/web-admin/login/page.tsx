@@ -27,31 +27,31 @@ export default function WebAdminLoginPage() {
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
-      <Card className="w-full max-w-md border-slate-700 bg-slate-800/50 backdrop-blur">
+    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
+      <Card className="w-full max-w-md border shadow-line-lg">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg">
             <CreditCard className="w-8 h-8 text-white" />
           </div>
           <div>
-            <CardTitle className="text-2xl font-bold text-white">LINE Lender</CardTitle>
-            <CardDescription className="text-slate-400 mt-1">
+            <CardTitle className="text-2xl font-bold text-foreground">LINE Lender</CardTitle>
+            <CardDescription className="text-muted-foreground mt-1">
               Staff Administration Portal
             </CardDescription>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
           {error && (
-            <div className="flex items-center gap-3 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-              <p className="text-sm text-red-300">{error}</p>
+            <div className="flex items-center gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+              <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
+              <p className="text-sm text-destructive">{error}</p>
             </div>
           )}
-          
-          <div className="text-center text-slate-300 text-sm">
+
+          <div className="text-center text-muted-foreground text-sm">
             <p>Sign in with your authorized account to access the staff portal.</p>
           </div>
-          
+
           <Button
             onClick={handleLogin}
             className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg"
@@ -60,8 +60,8 @@ export default function WebAdminLoginPage() {
             <LogIn className="w-5 h-5 mr-2" />
             Sign in with Google
           </Button>
-          
-          <div className="text-center text-xs text-slate-500">
+
+          <div className="text-center text-xs text-tertiary">
             <p>Only authorized staff members can access this portal.</p>
             <p className="mt-1">Contact your administrator if you need access.</p>
           </div>

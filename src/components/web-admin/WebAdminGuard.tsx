@@ -21,10 +21,10 @@ export function WebAdminGuard({ children }: WebAdminGuardProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
-          <Loader2 className="w-12 h-12 text-green-500 mx-auto animate-spin" />
-          <p className="text-slate-400">Loading...</p>
+          <Loader2 className="w-12 h-12 text-primary mx-auto animate-spin" />
+          <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
     );

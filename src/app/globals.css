@@ -48,114 +48,74 @@
   --color-line-green: #06C755;
   --color-line-green-dark: #05a648;
   --color-line-green-light: #e8f8ef;
+  --color-line-blue: #4d73ff;
+  --color-line-blue-light: #eef2ff;
+  --color-line-red: #e02000;
+  --color-tertiary: #999999;
 }
 
-/* LINE Brand Color System
+/* LINE Developers Design System - Light Theme
+ * Based on: https://designsystem.line.me/
  * Primary: #06C755 (LINE Green) - Main action buttons, active states
- * Secondary: #111111 (LINE Black) - Headers, sidebar backgrounds
- * Background: #FFFFFF (white) / #F8F9FA (soft gray)
- * Foreground: #222222 (primary text)
+ * Secondary Blue: #4d73ff - Links, info states
+ * Background: #FFFFFF (white) / #f7f8f9 (surface)
+ * Text: #000000 (primary) / #616161 (secondary) / #999999 (tertiary)
  */
 
 :root {
   --radius: 0.5rem;
-  
-  /* Background & Foreground - Clean white with dark text */
-  --background: #FFFFFF;
-  --foreground: #222222;
-  
-  /* Card - White with subtle shadow feel */
-  --card: #FFFFFF;
-  --card-foreground: #222222;
-  
+
+  /* Background & Foreground - LINE Developers style */
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Card - Clean white */
+  --card: #ffffff;
+  --card-foreground: #000000;
+
   /* Popover */
-  --popover: #FFFFFF;
-  --popover-foreground: #222222;
-  
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+
   /* Primary - LINE Green */
   --primary: #06C755;
-  --primary-foreground: #FFFFFF;
-  
-  /* Secondary - Soft gray background */
-  --secondary: #F8F9FA;
-  --secondary-foreground: #111111;
-  
+  --primary-foreground: #ffffff;
+
+  /* Secondary - Light surface gray */
+  --secondary: #f7f8f9;
+  --secondary-foreground: #000000;
+
   /* Muted - Subtle backgrounds */
-  --muted: #F8F9FA;
-  --muted-foreground: #6B7280;
-  
+  --muted: #f7f8f9;
+  --muted-foreground: #616161;
+
   /* Accent - Light green tint */
   --accent: #e8f8ef;
   --accent-foreground: #05a648;
-  
-  /* Destructive - Error red */
-  --destructive: #DC2626;
-  
-  /* Border & Input - Light gray borders */
-  --border: #E5E7EB;
-  --input: #E5E7EB;
+
+  /* Destructive - LINE error red */
+  --destructive: #e02000;
+
+  /* Border & Input - LINE style borders */
+  --border: #efefef;
+  --input: #efefef;
   --ring: #06C755;
-  
+
   /* Chart colors - LINE-inspired palette */
   --chart-1: #06C755;
   --chart-2: #05a648;
-  --chart-3: #4ADE80;
+  --chart-3: #4d73ff;
   --chart-4: #22C55E;
   --chart-5: #16A34A;
-  
-  /* Sidebar - Dark theme for admin console */
-  --sidebar: #111111;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #06C755;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1F2937;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #374151;
-  --sidebar-ring: #06C755;
-}
 
-.dark {
-  --background: #111111;
-  --foreground: #F9FAFB;
-  
-  --card: #1F2937;
-  --card-foreground: #F9FAFB;
-  
-  --popover: #1F2937;
-  --popover-foreground: #F9FAFB;
-  
-  /* Primary stays LINE Green in dark mode */
-  --primary: #06C755;
-  --primary-foreground: #FFFFFF;
-  
-  --secondary: #1F2937;
-  --secondary-foreground: #F9FAFB;
-  
-  --muted: #374151;
-  --muted-foreground: #9CA3AF;
-  
-  --accent: #1F2937;
-  --accent-foreground: #06C755;
-  
-  --destructive: #EF4444;
-  
-  --border: #374151;
-  --input: #374151;
-  --ring: #06C755;
-  
-  --chart-1: #06C755;
-  --chart-2: #4ADE80;
-  --chart-3: #22C55E;
-  --chart-4: #16A34A;
-  --chart-5: #15803D;
-  
-  --sidebar: #0A0A0A;
-  --sidebar-foreground: #F9FAFB;
+  /* Sidebar - Light theme for admin console */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #000000;
   --sidebar-primary: #06C755;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1F2937;
-  --sidebar-accent-foreground: #F9FAFB;
-  --sidebar-border: #374151;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f7f8f9;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #efefef;
   --sidebar-ring: #06C755;
 }
 
@@ -173,15 +133,31 @@
   .line-gradient {
     background: linear-gradient(135deg, #06C755 0%, #05a648 100%);
   }
-  
-  .line-gradient-dark {
-    background: linear-gradient(135deg, #111111 0%, #1F2937 100%);
+
+  .text-tertiary {
+    color: #999999;
   }
-  
+
+  .bg-surface {
+    background-color: #f7f8f9;
+  }
+
+  .border-line {
+    border-color: #efefef;
+  }
+
+  .shadow-line {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .shadow-line-lg {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  }
+
   .line-shadow {
     box-shadow: 0 4px 6px -1px rgba(6, 199, 85, 0.1), 0 2px 4px -1px rgba(6, 199, 85, 0.06);
   }
-  
+
   .line-shadow-lg {
     box-shadow: 0 10px 15px -3px rgba(6, 199, 85, 0.1), 0 4px 6px -2px rgba(6, 199, 85, 0.05);
   }
