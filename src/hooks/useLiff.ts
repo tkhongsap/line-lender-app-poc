@@ -25,6 +25,25 @@ export function useLiff(liffId?: string): UseLiffReturn {
     initialize();
   }, [initialize]);
 
+  // After successful LIFF init, check if we need to redirect based on liff.state
+  useEffect(() => {
+    if (state.isInitialized && state.isLoggedIn && typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const liffState = params.get('liff.state');
+      
+      if (liffState) {
+        // Decode the intended path (e.g., "%2Fen%2Fapply" -> "/en/apply")
+        const intendedPath = decodeURIComponent(liffState);
+        const currentPath = window.location.pathname;
+        
+        // If we're not on the intended page, redirect
+        if (intendedPath !== currentPath && intendedPath.startsWith('/')) {
+          window.location.href = intendedPath;
+        }
+      }
+    }
+  }, [state.isInitialized, state.isLoggedIn]);
+
   const handleLogin = useCallback(() => {
     if (state.isInitialized) {
       login(window.location.href);
